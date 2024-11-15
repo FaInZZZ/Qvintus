@@ -66,10 +66,13 @@ $adminMenuLinks = array(
 			</li>";
 		  }
 	  }
+    echo "<li class='nav-item'>
+			  <a class='nav-link' href='?logout=1'>Log out</a>
+			</li>";
 	
 	  }
 	  else{
-		header("Location: login.php");
+      echo"";
 	  }
 		?>
 		
