@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 15, 2024 at 01:51 PM
+-- Generation Time: Nov 18, 2024 at 02:27 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -41,11 +41,17 @@ CREATE TABLE `table_bocker` (
   `kategori_fk` int(11) NOT NULL,
   `genre_fk` int(11) NOT NULL,
   `sprak_fk` int(11) NOT NULL,
-  `forlag_fk` int(11) NOT NULL,
   `status_fk` int(11) NOT NULL,
   `skapad_av_fk` int(11) NOT NULL,
   `bok_img` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `table_bocker`
+--
+
+INSERT INTO `table_bocker` (`id_bok`, `titel`, `beskrivning`, `aldersrekommendation`, `utgiven`, `sidor`, `pris`, `serie_fk`, `forfattare_fk`, `form_eller_illu_fk`, `kategori_fk`, `genre_fk`, `sprak_fk`, `status_fk`, `skapad_av_fk`, `bok_img`) VALUES
+(10, 'tet', 'des', '121', '2024-11-21', '121', 2212, 1, 1, 1, 7, 2, 1, 2, 2, 'download.jpg');
 
 -- --------------------------------------------------------
 
@@ -85,24 +91,6 @@ INSERT INTO `table_forfattare` (`id_forfattare`, `forfattare_namn`) VALUES
 (1, 'forfattare'),
 (2, 'forfattare2'),
 (3, 'forfattare3');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `table_forlag`
---
-
-CREATE TABLE `table_forlag` (
-  `id_forlag` int(11) NOT NULL,
-  `forlag_namn` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `table_forlag`
---
-
-INSERT INTO `table_forlag` (`id_forlag`, `forlag_namn`) VALUES
-(1, 'forlag');
 
 -- --------------------------------------------------------
 
@@ -251,12 +239,11 @@ INSERT INTO `table_users` (`u_id`, `u_name`, `u_password`, `u_email`, `u_role_fk
 --
 ALTER TABLE `table_bocker`
   ADD PRIMARY KEY (`id_bok`),
-  ADD KEY `serie_fk` (`serie_fk`,`forfattare_fk`,`form_eller_illu_fk`,`kategori_fk`,`genre_fk`,`sprak_fk`,`forlag_fk`,`status_fk`,`skapad_av_fk`),
+  ADD KEY `serie_fk` (`serie_fk`,`forfattare_fk`,`form_eller_illu_fk`,`kategori_fk`,`genre_fk`,`sprak_fk`,`status_fk`,`skapad_av_fk`),
   ADD KEY `fk2` (`kategori_fk`),
   ADD KEY `fk3` (`forfattare_fk`),
   ADD KEY `fk5` (`sprak_fk`),
   ADD KEY `fk7` (`skapad_av_fk`),
-  ADD KEY `fk9` (`forlag_fk`),
   ADD KEY `fk10` (`status_fk`),
   ADD KEY `fk11` (`form_eller_illu_fk`),
   ADD KEY `fk4` (`genre_fk`);
@@ -272,12 +259,6 @@ ALTER TABLE `table_category`
 --
 ALTER TABLE `table_forfattare`
   ADD PRIMARY KEY (`id_forfattare`);
-
---
--- Indexes for table `table_forlag`
---
-ALTER TABLE `table_forlag`
-  ADD PRIMARY KEY (`id_forlag`);
 
 --
 -- Indexes for table `table_form`
@@ -330,7 +311,7 @@ ALTER TABLE `table_users`
 -- AUTO_INCREMENT for table `table_bocker`
 --
 ALTER TABLE `table_bocker`
-  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `table_category`
@@ -343,12 +324,6 @@ ALTER TABLE `table_category`
 --
 ALTER TABLE `table_forfattare`
   MODIFY `id_forfattare` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
--- AUTO_INCREMENT for table `table_forlag`
---
-ALTER TABLE `table_forlag`
-  MODIFY `id_forlag` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `table_form`
@@ -408,9 +383,7 @@ ALTER TABLE `table_bocker`
   ADD CONSTRAINT `fk4` FOREIGN KEY (`genre_fk`) REFERENCES `table_genre` (`id_genre`),
   ADD CONSTRAINT `fk5` FOREIGN KEY (`sprak_fk`) REFERENCES `table_spark` (`id_sprak`),
   ADD CONSTRAINT `fk6` FOREIGN KEY (`status_fk`) REFERENCES `table_status` (`id_status`),
-  ADD CONSTRAINT `fk7` FOREIGN KEY (`skapad_av_fk`) REFERENCES `table_users` (`u_id`),
-  ADD CONSTRAINT `fk8` FOREIGN KEY (`forlag_fk`) REFERENCES `table_forlag` (`id_forlag`),
-  ADD CONSTRAINT `fk9` FOREIGN KEY (`forlag_fk`) REFERENCES `table_forlag` (`id_forlag`);
+  ADD CONSTRAINT `fk7` FOREIGN KEY (`skapad_av_fk`) REFERENCES `table_users` (`u_id`);
 
 --
 -- Constraints for table `table_users`

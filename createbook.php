@@ -3,11 +3,21 @@ include_once 'includes/functions.php';
 include_once 'includes/header.php';
 $user->checkLoginStatus();
 
+
+
 $getCategoryInformation = getCategoryInformation($pdo);
 $getAuthorInformation = getAuthorInformation($pdo);
 $getGenreInformation = getGenreInformation($pdo);
 $getSerieInformation = getSerieInformation($pdo);
 $getLanguageInformation = getLanguageInformation($pdo);
+$getStatusInformation = getStatusInformation($pdo);
+$getDesignerInformation = getDesignerInformation($pdo);
+
+
+
+if(isset($_POST['submitnb'])) {
+    $submitNewBook = insertNewBook($pdo);
+}
 
 
 ?>
@@ -33,10 +43,16 @@ $getLanguageInformation = getLanguageInformation($pdo);
 
 <div class="container mt-5">
     <h2>Skapa ny bok</h2>
-    <form action="/submit" method="post">
+    
+    <form action="" method="post" enctype="multipart/form-data">
         <div class="mb-3">
             <label for="title" class="form-label">Titel:</label>
             <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="description" class="form-label">description:</label>
+            <input type="text" class="form-control" id="description" name="description" required>
         </div>
 
         <div class="mb-3">
@@ -114,7 +130,42 @@ $getLanguageInformation = getLanguageInformation($pdo);
             </select>
         </div>
 
-        <button type="submit" class="btn btn-primary">Skicka</button>
+
+        <div class="mb-3">
+            <label for="DesignerSelect" class="form-label">Select Designer or illustrator</label>
+            <select id="DesignerSelect" name="id_Designer" class="form-select w-100">
+                <option value="">Choose a Designer or illustrator</option>
+                <?php foreach ($getDesignerInformation as $row): ?>
+                    <option value="<?php echo $row['id_form_eller_illu']; ?>">
+                        <?php echo $row['form_eller_illu_namn']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="date" class="form-label">Date:</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="StatusSelect" class="form-label">Select Status</label>
+            <select id="StatusSelect" name="id_status" class="form-select w-100">
+                <option value="">Choose a Status</option>
+                <?php foreach ($getStatusInformation as $row): ?>
+                    <option value="<?php echo $row['id_status']; ?>">
+                        <?php echo $row['status_namn']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+            <div class="form-group">
+                    <label for="img">Add image</label>
+                    <input type="file" class="form-control" id="book_img" name="book_img" placeholder="Upload Image"></input>
+                </div>
+
+        <button type="submit" name="submitnb" class="btn btn-primary">Skicka</button>
     </form>
 </div>
 
@@ -135,6 +186,15 @@ $getLanguageInformation = getLanguageInformation($pdo);
   $(document).ready(function() {
     $('#LanguageSelect').select2();  
   });
+  $(document).ready(function() {
+    $('#StatusSelect').select2();  
+  });
+  $(document).ready(function() {
+    $('#DesignerSelect').select2();  
+  });
+
+
+  
 </script>
 
     
