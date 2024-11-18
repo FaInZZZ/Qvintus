@@ -1,4 +1,5 @@
 <?php
+include_once 'includes/upload.php';
 require_once 'includes/class.user.php';
 require_once 'includes/config.php';
 $user = new User($pdo);
