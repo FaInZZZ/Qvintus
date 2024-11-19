@@ -1,6 +1,24 @@
 <?php
 include_once 'includes/header.php';
 
+function GetBookInformation($pdo) {
+    $stmt_getBookdata = $pdo->prepare('
+        SELECT 
+            table_bocker.*, 
+            table_users.u_name AS created_by_user 
+        FROM 
+            table_bocker
+        INNER JOIN 
+            table_users 
+        ON 
+            table_bocker.skapad_av_fk = table_users.u_id
+    ');
+    $stmt_getBookdata->execute();
+
+    return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
+}
+
+
 function getCategoryInformation($pdo) {
     $stmt_getCategorydata = $pdo->prepare('
         SELECT * 
@@ -94,8 +112,63 @@ function insertNewBook($pdo) {
     $stmt_insertNewBook->bindParam(":skapad_av_fk", $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":bok_img", $bookimg, PDO::PARAM_INT);
     
-
     $stmt_insertNewBook->execute();
+
+}
+
+function getBook($pdo) {
+
+    $stmt_getBookdata = $pdo->prepare('
+    SELECT 
+        table_bocker.*, 
+        table_users.u_name AS created_by_user, 
+        table_category.kategori_namn, 
+        table_forfattare.forfattare_namn, 
+        table_genre.genre_namn, 
+        table_serie.serie_namn, 
+        table_spark.sprak_namn, 
+        table_status.status_namn, 
+        table_form.form_eller_illu_namn
+    FROM 
+        table_bocker
+    INNER JOIN 
+        table_users 
+    ON 
+        table_bocker.skapad_av_fk = table_users.u_id
+    INNER JOIN 
+        table_category 
+    ON 
+        table_bocker.kategori_fk = table_category.id_kategori
+    INNER JOIN 
+        table_forfattare 
+    ON 
+        table_bocker.forfattare_fk = table_forfattare.id_forfattare
+    INNER JOIN 
+        table_genre 
+    ON 
+        table_bocker.genre_fk = table_genre.id_genre
+    INNER JOIN 
+        table_serie 
+    ON 
+        table_bocker.serie_fk = table_serie.id_serie
+    INNER JOIN 
+        table_spark 
+    ON 
+        table_bocker.sprak_fk = table_spark.id_sprak
+    INNER JOIN 
+        table_status 
+    ON 
+        table_bocker.status_fk = table_status.id_status
+    INNER JOIN 
+        table_form 
+    ON 
+        table_bocker.form_eller_illu_fk = table_form.id_form_eller_illu
+');
+
+$stmt_getBookdata->execute();
+
+return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
+
 
 }
 
