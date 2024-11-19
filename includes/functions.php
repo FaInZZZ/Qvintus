@@ -1,22 +1,61 @@
 <?php
 include_once 'includes/header.php';
 
-function GetBookInformation($pdo) {
+
+
+
+function getSingleBookInformation($pdo, $bookid) {
     $stmt_getBookdata = $pdo->prepare('
         SELECT 
             table_bocker.*, 
-            table_users.u_name AS created_by_user 
+            table_users.u_name,
+            table_spark.sprak_namn,
+            table_forfattare.forfattare_namn,
+            table_genre.genre_namn,
+            table_form.form_eller_illu_namn,
+            table_status.status_namn,
+            table_serie.serie_namn
         FROM 
             table_bocker
         INNER JOIN 
             table_users 
         ON 
             table_bocker.skapad_av_fk = table_users.u_id
+        INNER JOIN 
+            table_spark
+        ON
+            table_bocker.sprak_fk = table_spark.id_sprak
+        INNER JOIN 
+            table_forfattare
+        ON
+            table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        INNER JOIN 
+            table_genre
+        ON
+            table_bocker.genre_fk = table_genre.id_genre
+        INNER JOIN 
+            table_form
+        ON
+            table_bocker.form_eller_illu_fk = table_form.id_form_eller_illu
+        INNER JOIN 
+            table_status
+        ON
+            table_bocker.status_fk = table_status.id_status
+        INNER JOIN 
+            table_serie
+        ON
+            table_bocker.serie_fk = table_serie.id_serie
+        WHERE 
+            table_bocker.id_bok = :bookid
     ');
+
+    $stmt_getBookdata->bindParam(':bookid', $bookid, PDO::PARAM_INT);
     $stmt_getBookdata->execute();
 
-    return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
+    return $stmt_getBookdata->fetch(PDO::FETCH_ASSOC); 
 }
+
+
 
 
 function getCategoryInformation($pdo) {

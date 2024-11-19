@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 18, 2024 at 02:27 PM
+-- Generation Time: Nov 19, 2024 at 02:49 PM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -30,7 +30,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `table_bocker` (
   `id_bok` int(11) NOT NULL,
   `titel` varchar(255) NOT NULL,
-  `beskrivning` varchar(510) NOT NULL,
+  `beskrivning` varchar(1020) NOT NULL,
   `aldersrekommendation` varchar(255) NOT NULL,
   `utgiven` date NOT NULL,
   `sidor` varchar(255) NOT NULL,
@@ -51,7 +51,8 @@ CREATE TABLE `table_bocker` (
 --
 
 INSERT INTO `table_bocker` (`id_bok`, `titel`, `beskrivning`, `aldersrekommendation`, `utgiven`, `sidor`, `pris`, `serie_fk`, `forfattare_fk`, `form_eller_illu_fk`, `kategori_fk`, `genre_fk`, `sprak_fk`, `status_fk`, `skapad_av_fk`, `bok_img`) VALUES
-(10, 'tet', 'des', '121', '2024-11-21', '121', 2212, 1, 1, 1, 7, 2, 1, 2, 2, 'download.jpg');
+(10, 'tet', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non lacus a orci hendrerit consectetur non ac arcu. Vestibulum tempor lobortis imperdiet. Aenean sit amet tortor sagittis, feugiat libero sit amet, pretium mi. Donec quis volutpat ante, et fringilla nunc. Sed et felis consequat lorem venenatis ultricies vel et mi. Phasellus dapibus vestibulum mi sollicitudin faucibus. Praesent justo libero, cursus in purus vitae, commodo feugiat metus. Pellentesque nisl felis, elementum at ultrices ac, feugiat tristique sem. Donec mollis enim ligula, eu fringilla risus facilisis pulvinar. Donec id ultrices libero, vitae lobortis justo. Praesent at vulputate sem. Praesent id dui id urna efficitur viverra in interdum nunc. Mauris eu nibh laoreet, convallis diam ac, imperdiet magna. Nullam nisi lectus, semper vestibulum turpis vel, sagittis mollis eros.\r\n\r\nDonec sed lorem magna. Praesent at molestie felis, id pretium ligula. Etiam hendrerit nisi eu faucibus cursus. Nunc nec tellus vel sem venenatis mollis. Proin ac ', '121', '2024-11-21', '121', 2212, 1, 1, 1, 7, 2, 1, 2, 2, 'download.jpg'),
+(11, 'öka', 'descriptan', '21-21', '2024-11-19', '392', 522, 2, 1, 1, 8, 2, 1, 2, 2, 'marbles-1659398_1280.jpg');
 
 -- --------------------------------------------------------
 
@@ -311,7 +312,7 @@ ALTER TABLE `table_users`
 -- AUTO_INCREMENT for table `table_bocker`
 --
 ALTER TABLE `table_bocker`
-  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `table_category`
