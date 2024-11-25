@@ -62,6 +62,7 @@ if (isset($_GET['search'])) {
                             <p class="card-text"><strong>Serie:</strong> <?php echo htmlspecialchars($row['serie']); ?></p>
                             <?php echo "<a href='single-book.php?BookID=" . $row['id_bok'] . "' class='btn btn-primary'>View</a>"; ?>
                             <?php echo "<a href='editbook.php?BookID=" . $row['id_bok'] . "' class='btn btn-warning'>Edit</a>"; ?>
+                            <?php echo "<a href='deletebook.php?BookID=" . $row['id_bok'] . "' class='btn btn-danger'>Delete</a>"; ?>
                         </div>
                     </div>
                 </div>
