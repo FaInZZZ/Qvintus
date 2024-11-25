@@ -20,15 +20,12 @@ if(isset($_POST["submitnb"])) {
         }
     }
 
-    if (file_exists($target_file)) {
+    if (file_exists($target_file)) {    
         echo "Sorry, file already exists.";
         $uploadOk = 0;
     }
 
-    if ($_FILES["book_img"]["size"] > 500000) {
-        echo "Sorry, your file is too large.";
-        $uploadOk = 0;
-    }
+   
 
     if($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg"
     && $imageFileType != "gif" ) {
@@ -40,11 +37,14 @@ if(isset($_POST["submitnb"])) {
         echo "Sorry, your file was not uploaded.";
     } else {
         if (move_uploaded_file($_FILES["book_img"]["tmp_name"], $target_file)) {
-            echo "The file ". htmlspecialchars( basename( $_FILES["book_img"]["name"])). " has been uploaded.";
+            echo "The file " . htmlspecialchars(basename($_FILES["book_img"]["name"])) . " has been uploaded.";
+            $bookimg = basename($_FILES["book_img"]["name"]);
         } else {
             echo "Sorry, there was an error uploading your file.";
+            $bookimg = $currentBook['bok_img']; 
         }
     }
+    
 }
 ?>
 

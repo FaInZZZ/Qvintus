@@ -60,7 +60,8 @@ if (isset($_GET['search'])) {
                             <p class="card-text"><strong>Kategori:</strong> <?php echo htmlspecialchars($row['kategori']); ?></p>
                             <p class="card-text"><strong>Genre:</strong> <?php echo htmlspecialchars($row['genre']); ?></p>
                             <p class="card-text"><strong>Serie:</strong> <?php echo htmlspecialchars($row['serie']); ?></p>
-                            <?php echo "<a href='single-book.php?BookID=" . $row['id_bok'] . "' class='btn btn-primary'>Choose</a>"; ?>
+                            <?php echo "<a href='single-book.php?BookID=" . $row['id_bok'] . "' class='btn btn-primary'>View</a>"; ?>
+                            <?php echo "<a href='editbook.php?BookID=" . $row['id_bok'] . "' class='btn btn-warning'>Edit</a>"; ?>
                         </div>
                     </div>
                 </div>
