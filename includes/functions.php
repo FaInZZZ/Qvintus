@@ -336,7 +336,38 @@ return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
+function getRareBook($pdo) {
+    $stmt_getbookdata = $pdo->prepare('
+        SELECT * 
+        FROM table_bocker
+        WHERE status_fk = 1');
+    $stmt_getbookdata->execute();
+    
 
+    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+}
+
+function getPopularBook($pdo) {
+    $stmt_getbookdata = $pdo->prepare('
+        SELECT * 
+        FROM table_bocker
+        WHERE status_fk = 2');
+    $stmt_getbookdata->execute();
+    
+
+    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+}
+
+function getPopularRNBook($pdo) {
+    $stmt_getbookdata = $pdo->prepare('
+        SELECT * 
+        FROM table_bocker
+        WHERE status_fk = 3');
+    $stmt_getbookdata->execute();
+    
+
+    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+}
 
 
 ?>
