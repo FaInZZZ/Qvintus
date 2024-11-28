@@ -337,36 +337,36 @@ return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
 
 
 function getRareBook($pdo) {
-    $stmt_getbookdata = $pdo->prepare('
-        SELECT * 
+    $query = $pdo->prepare('
+        SELECT *
         FROM table_bocker
-        WHERE status_fk = 1');
-    $stmt_getbookdata->execute();
-    
-
-    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 1
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getPopularBook($pdo) {
-    $stmt_getbookdata = $pdo->prepare('
-        SELECT * 
+    $query = $pdo->prepare('
+        SELECT *
         FROM table_bocker
-        WHERE status_fk = 2');
-    $stmt_getbookdata->execute();
-    
-
-    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 2
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 function getPopularRNBook($pdo) {
-    $stmt_getbookdata = $pdo->prepare('
-        SELECT * 
+    $query = $pdo->prepare('
+        SELECT *
         FROM table_bocker
-        WHERE status_fk = 3');
-    $stmt_getbookdata->execute();
-    
-
-    return $stmt_getbookdata->fetchall(PDO::FETCH_ASSOC);
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 3
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
