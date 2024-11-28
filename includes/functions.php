@@ -336,7 +336,38 @@ return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
+function getRareBook($pdo) {
+    $query = $pdo->prepare('
+        SELECT *
+        FROM table_bocker
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 1
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
 
+function getPopularBook($pdo) {
+    $query = $pdo->prepare('
+        SELECT *
+        FROM table_bocker
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 2
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getPopularRNBook($pdo) {
+    $query = $pdo->prepare('
+        SELECT *
+        FROM table_bocker
+        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
+        WHERE table_bocker.status_fk = 3
+    ');
+    $query->execute();
+    return $query->fetchAll(PDO::FETCH_ASSOC);
+}
 
 
 ?>

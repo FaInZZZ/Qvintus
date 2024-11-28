@@ -1,7 +1,52 @@
-.hero-section {
-	background-image: url('../images/pizza_header_4k.webp');
-	background-size: cover;
-	background-repeat: no-repeat;
-	color: whitesmoke;
-	min-height: 500px;
+
+
+.book-list-container {
+	display: flex;
+	white-space: nowrap;
+	overflow-x: auto;
+	scroll-behavior: smooth;
+	width: 100%; 
+  }
+
+  .book-card {
+	flex: 0 0 auto;
+	width: 18rem;
+	word-wrap: break-word;
+	overflow: hidden; 
+  }
+
+
+.card-body {
+	max-height: 200px;
+	overflow: hidden;
+}
+
+.card-text {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	display: -webkit-box;
+	-webkit-line-clamp: 3; 
+	-webkit-box-orient: vertical;
+}
+
+.custom-btn {
+    background-color: #8a7336!important;  
+    color: white !important;               
+    border: 1px solid #8a7336 !important; 
+}
+
+.custom-btn:hover {
+    background-color: #594b24 !important;  
+    border-color: #594b24 !important;
+}
+
+.RnV {
+	color: black !important;               
+    border: 0px solid black !important; 
+}
+
+.RnV:hover {
+    background-color: black !important;  
+    border-color: black !important;
+	color: white !important;
 }
