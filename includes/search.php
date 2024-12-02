@@ -76,5 +76,36 @@ if (isset($_GET['search'])) {
         <?php endif; ?>
     </div>
 </div>
+
+
+
+<?php
+include_once 'config.php';
+
+if (isset($_GET['query'])) {
+    $query = "%" . $_GET['query'] . "%";
+
+    $stmt = $pdo->prepare("SELECT id_genre, genre_namn FROM table_genre WHERE genre_namn LIKE ?");
+    $stmt->execute([$query]);
+    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if ($results) {
+        foreach ($results as $row) {
+            echo "
+            <tr>
+                <td>" . htmlspecialchars($row['id_genre']) . "</td>
+                <td>" . htmlspecialchars($row['genre_namn']) . "</td>
+                <td>
+                    <button class='btn btn-warning btn-sm edit-btn' data-id='" . $row['id_genre'] . "' data-name='" . htmlspecialchars($row['genre_namn']) . "'>Edit</button>
+                    <button class='btn btn-danger btn-sm delete-btn' data-id='" . $row['id_genre'] . "'>Delete</button>
+                </td>
+            </tr>";
+        }
+    } else {
+        echo "<tr><td colspan='3'>No results found</td></tr>";
+    }
+}
+?>
+
 </body>
 </html>

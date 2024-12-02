@@ -192,6 +192,16 @@ function getCategoryInformation($pdo) {
     return $stmt_getCategorydata->fetchAll(PDO::FETCH_ASSOC);
 }
 
+function getStockInformation($pdo) {
+    $stmt_getStockdata = $pdo->prepare('
+        SELECT * 
+        FROM table_stock');
+    $stmt_getStockdata->execute();
+    
+
+    return $stmt_getStockdata->fetchAll(PDO::FETCH_ASSOC);
+}
+
 function getAuthorInformation($pdo) {
     $stmt_getAuthordata = $pdo->prepare('
         SELECT * 
@@ -212,6 +222,26 @@ function getGenreInformation($pdo) {
 
     return $stmt_getGenredata->fetchAll(PDO::FETCH_ASSOC);
 }
+
+
+
+function createGenre($pdo) {
+    $stmt = $pdo->prepare('INSERT INTO table_genre (genre_namn) VALUES (:genre_namn)');
+    $stmt->bindParam(':genre_namn', $_POST['genreName'], PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+function editGenre($pdo) {
+    if (isset($_POST['genreId']) && isset($_POST['genreName'])) {
+        $stmt = $pdo->prepare('UPDATE table_genre SET genre_namn = :genre_namn WHERE id_genre = :id_genre');
+        $stmt->bindParam(':genre_namn', $_POST['genreName'], PDO::PARAM_STR);
+        $stmt->bindParam(':id_genre', $_POST['genreId'], PDO::PARAM_INT);
+        $stmt->execute();
+    }
+}
+
+   
+
 
 function getSerieInformation($pdo) {
     $stmt_getSeriedata = $pdo->prepare('
@@ -257,7 +287,7 @@ function getDesignerInformation($pdo) {
 function insertNewBook($pdo) {
     $bookimg = basename($_FILES['book_img']['name']);
 
-    $stmt_insertNewBook = $pdo->prepare('INSERT INTO table_bocker (titel, beskrivning, aldersrekommendation, utgiven, sidor, pris, serie_fk, forfattare_fk, form_eller_illu_fk, kategori_fk, genre_fk, sprak_fk, status_fk, skapad_av_fk, bok_img) VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :forfattare_fk, :form_eller_illu_fk, :kategori_fk, :genre_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img)');
+    $stmt_insertNewBook = $pdo->prepare('INSERT INTO table_bocker (titel, beskrivning, aldersrekommendation, utgiven, sidor, pris, serie_fk, forfattare_fk, form_eller_illu_fk, kategori_fk, genre_fk, sprak_fk, status_fk, skapad_av_fk, bok_img, stock_fk) VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :forfattare_fk, :form_eller_illu_fk, :kategori_fk, :genre_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img, :stock_fk)');
 
     $stmt_insertNewBook->bindParam(":titel", $_POST['title'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":beskrivning", $_POST['description'], PDO::PARAM_STR);
@@ -272,12 +302,13 @@ function insertNewBook($pdo) {
     $stmt_insertNewBook->bindParam(":genre_fk", $_POST['id_genre'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":sprak_fk", $_POST['id_Language'], PDO::PARAM_INT); 
     $stmt_insertNewBook->bindParam(":status_fk", $_POST['id_status'], PDO::PARAM_INT);
+    $stmt_insertNewBook->bindParam(":stock_fk", $_POST['id_stock'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":skapad_av_fk", $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":bok_img", $bookimg, PDO::PARAM_INT);
     
     $stmt_insertNewBook->execute();
 
-}
+}   
 
 function getBook($pdo) {
 
@@ -358,15 +389,29 @@ function getPopularBook($pdo) {
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
-function getPopularRNBook($pdo) {
-    $query = $pdo->prepare('
-        SELECT *
-        FROM table_bocker
-        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
-        WHERE table_bocker.status_fk = 3
-    ');
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
+
+
+
+
+function insertNewHistory($pdo) {
+    $bookimg = basename($_FILES['book_img']['name']);
+
+    $stmt_insertNewHistory = $pdo->prepare('INSERT INTO table_history (history_title, history_desc, history_img) VALUES (:history_title, :history_desc, :history_img)');
+
+    $stmt_insertNewHistory->bindParam(":history_title", $_POST['history_title'], PDO::PARAM_STR);
+    $stmt_insertNewHistory->bindParam(":history_desc", $_POST['history_desc'], PDO::PARAM_STR);
+    $stmt_insertNewHistory->bindParam(":history_img", $bookimg, PDO::PARAM_STR);
+    
+    $stmt_insertNewHistory->execute();
+
+}
+
+
+
+function getLatestHistories($pdo) {
+   $stmt = $pdo->prepare("SELECT * FROM `table_history` ORDER BY `id_history` DESC LIMIT 3");
+   $stmt->execute();
+   return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
