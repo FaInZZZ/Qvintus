@@ -12,6 +12,7 @@ $getSerieInformation = getSerieInformation($pdo);
 $getLanguageInformation = getLanguageInformation($pdo);
 $getStatusInformation = getStatusInformation($pdo);
 $getDesignerInformation = getDesignerInformation($pdo);
+$getStockInformation = getStockInformation($pdo);
 
 
 
@@ -155,6 +156,18 @@ if(isset($_POST['submitnb'])) {
                 <?php foreach ($getStatusInformation as $row): ?>
                     <option value="<?php echo $row['id_status']; ?>">
                         <?php echo $row['status_namn']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
+
+        <div class="mb-3">
+            <label for="StockSelect" class="form-label">Select Stock</label>
+            <select id="StockSelect" name="id_stock" class="form-select w-100">
+                <option value="">Choose stock</option>
+                <?php foreach ($getStockInformation as $row): ?>
+                    <option value="<?php echo $row['id_stock']; ?>">
+                        <?php echo $row['stock_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>

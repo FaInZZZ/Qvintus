@@ -4,7 +4,36 @@ include_once 'includes/header.php';
 
 $getRareBooks = getRareBook($pdo); 
 $getPopularBooks = getPopularBook($pdo); 
-$getPopularRNBooks = getPopularRNBook($pdo); 
+$histories = getLatestHistories($pdo);
+
+$cards = [
+    [
+        'title' => 'Card Title 1',
+        'text' => 'This is a short description for card 1.',
+        'image' => 'https://via.placeholder.com/150/ff7f7f',
+    ],
+    [
+        'title' => 'Card Title 2',
+        'text' => 'This is a short description for card 2.',
+        'image' => 'https://via.placeholder.com/150/7fffd4', 
+    ],
+    [
+        'title' => 'Card Title 3',
+        'text' => 'This is a short description for card 3.',
+        'image' => 'https://via.placeholder.com/150/6495ed', 
+    ],
+    [
+        'title' => 'Card Title 4',
+        'text' => 'This is a short description for card 4.',
+        'image' => 'https://via.placeholder.com/150/ffa500', 
+    ],
+    [
+        'title' => 'Card Title 5',
+        'text' => 'This is a short description for card 5.',
+        'image' => 'https://via.placeholder.com/150/ba55d3', 
+    ],
+];
+
 ?>
 <!doctype html>
 <html lang="en">
@@ -34,46 +63,110 @@ $getPopularRNBooks = getPopularRNBook($pdo);
         </div>
         <?php endforeach; ?>
     </div>
-    <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV" id="">See more</a>
+    <div class="see-more-container d-flex justify-content-end mt-5">
+        <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV">See more</a>
+    </div>
 </div>
 
-<div class="container mt-4">
-    <div class="text-center">
-        <h2>Popular</h2>
-    </div>
-    <div class="book-list-container">
-        <?php foreach ($getPopularBooks as $book): ?>
-        <div class="book-card me-3">
-            <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
-            <div class="card-body">
-                <h5 class="card-title"><?php echo htmlspecialchars($book['titel']); ?></h5>
-                <p class="card-text"><?php echo htmlspecialchars($book['beskrivning']); ?></p>
-                <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" class="btn custom-btn">View</a>
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <?php foreach ($cards as $card): ?>
+        <div class="col-2 mb-3">
+            <div class="card h-100">
+                <img src="<?php echo htmlspecialchars($card['image']); ?>" class="card-img-top" alt="Card Image">
+                <div class="card-body">
+                    <h5 class="card-title"><?php echo htmlspecialchars($card['title']); ?></h5>
+                    <p class="card-text"><?php echo htmlspecialchars($card['text']); ?></p>
+                    <a href="#" class="btn btn-primary">View More</a>
+                </div>
             </div>
         </div>
         <?php endforeach; ?>
     </div>
-    <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV" id="">See more</a>
 </div>
 
-<div class="container mt-4">
-    <div class="text-center">
-        <h2>Popular right now!</h2>
-    </div>
-    <div class="d-flex flex-row flex-nowrap overflow-auto">
-        <?php foreach ($getPopularRNBooks as $book): ?>
-        <div class="card me-3" style="width: 18rem;">
-            <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
-            <div class="card-body">
-                <h5 class="card-title"><?php echo htmlspecialchars($book['titel']); ?></h5>
-                <p class="card-text"><?php echo htmlspecialchars($book['beskrivning']); ?></p>
-                <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" class="btn custom-btn">View</a>
-            </div>
+
+<section class="container py-5 text-center custom-section-height mb-5 mt-5">
+    <div class="card p-5 border-0 rounded">
+        <h2 class="h2 text-dark mb-3">Can't find what you are looking for?</h2>
+        <p class="lead text-muted mb-4">No problem, we can handle most requests, big or small.</p>
+        <div class="d-flex justify-content-center">
+            <a href="#" class="btn custom-btn btn-lg custom-btn-width">Make a request</a>
         </div>
-        <?php endforeach; ?>
     </div>
-    <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV" id="">See more</a>
-</div>
+</section>
+
+<section class="container py-5 mt-5">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <h2 class="h2 text-dark mb-3 text-center">Greetings from Qvintus</h2>
+            <p class="lead text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin condimentum felis ut lacus imperdiet, ut mollis eros dapibus. Proin ex nisl, mollis volutpat pulvinar vestibulum, ultricies quis lacus. Phasellus ornare maximus odio at ornare. Nullam quis purus in mi cursus convallis. Nam mattis rhoncus est. In vel blandit justo. Morbi eget lobortis metus. Suspendisse eu laoreet magna.
+In eget arcu viverra, ultrices felis vitae, tincidunt diam.  Cras dignissim diam eget nibh auctor cursus. Integer sit amet purus eget magna euismod iaculis. Maecenas nec tortor viverra, cursus leo sit amet, pharetra mauris. Proin sit amet nibh ut purus auctor pharetra ac vitae dolor. In justo mauris, accumsan nec sollicitudin nec, malesuada in felis. Donec nec ligula condimentum ex hendrerit venenatis id in risus. Phasellus cursus non risus in facilisis. Nam viverra ullamcorper elit sed gravida. Sed tempor dolor mi, a mattis ex sodales et. Donec suscipit tellus a leo convallis luctus.</p>
+        </div>
+        <div class="col-md-6">
+            <img src="img/Gamla-Stans-Bokhandel-besok-scaled.jpg" class="img-fluid rounded" alt="Your Image">
+        </div>
+    </div>
+</section>
+
+
+<div class="container my-5">
+        <h1 class="text-center mb-4">Latest Histories</h1>
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+            <?php foreach ($histories as $history): ?>
+                <div class="col">
+                    <div class="card h-100 shadow-sm">
+                        <img src="img/<?= htmlspecialchars($history['history_img']) ?>" 
+                             class="card-img-top" 
+                             alt="History Image" 
+                             style="height: 200px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?= htmlspecialchars($history['history_title']) ?></h5>
+                            <p class="card-text"><?= htmlspecialchars($history['history_desc']) ?></p>
+                        </div>
+                    </div>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
