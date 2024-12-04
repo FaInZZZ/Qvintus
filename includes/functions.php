@@ -231,16 +231,57 @@ function createGenre($pdo) {
     $stmt->execute();
 }
 
-function editGenre($pdo) {
-    if (isset($_POST['genreId']) && isset($_POST['genreName'])) {
-        $stmt = $pdo->prepare('UPDATE table_genre SET genre_namn = :genre_namn WHERE id_genre = :id_genre');
-        $stmt->bindParam(':genre_namn', $_POST['genreName'], PDO::PARAM_STR);
-        $stmt->bindParam(':id_genre', $_POST['genreId'], PDO::PARAM_INT);
-        $stmt->execute();
-    }
+function updateGenre($pdo, $genreId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_genre SET genre_namn = :updatedName WHERE id_genre = :genreId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':genreId', $genreId, PDO::PARAM_INT);
+    $stmt->execute();
 }
 
-   
+function deleteGenre($pdo, $genreId) {
+    $stmt = $pdo->prepare("DELETE FROM table_genre WHERE id_genre = :genreId");
+    $stmt->bindParam(':genreId', $genreId, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function createCategory($pdo) {
+    $stmt = $pdo->prepare('INSERT INTO table_category (kategori_namn) VALUES (:category_name)');
+    $stmt->bindParam(':category_name', $_POST['CategoryName'], PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+function updateCategory($pdo, $CategoryId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_category SET kategori_namn = :updatedName WHERE id_kategori = :CategoryId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':CategoryId', $CategoryId, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function deleteCategory($pdo, $CategoryId) {
+    $stmt = $pdo->prepare("DELETE FROM table_category WHERE id_kategori = :CategoryId");
+    $stmt->bindParam(':CategoryId', $CategoryId, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function createserie($pdo) {
+    $stmt = $pdo->prepare('INSERT INTO table_serie (serie_namn) VALUES (:serie_name)');
+    $stmt->bindParam(':serie_name', $_POST['serieName'], PDO::PARAM_STR);
+    $stmt->execute();
+}
+
+function updateserie($pdo, $serieId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_serie SET serie_namn = :updatedName WHERE id_serie = :serieId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':serieId', $serieId, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
+function deleteserie($pdo, $serieId) {
+    $stmt = $pdo->prepare("DELETE FROM table_serie WHERE id_serie = :serieId");
+    $stmt->bindParam(':serieId', $serieId, PDO::PARAM_INT);
+    $stmt->execute();
+}
+
 
 
 function getSerieInformation($pdo) {
@@ -367,6 +408,7 @@ return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
 }
 
 
+
 function getRareBook($pdo) {
     $query = $pdo->prepare('
         SELECT *
@@ -388,8 +430,6 @@ function getPopularBook($pdo) {
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
-
-
 
 
 

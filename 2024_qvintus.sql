@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Nov 19, 2024 at 02:49 PM
+-- Generation Time: Dec 04, 2024 at 09:42 AM
 -- Server version: 10.4.28-MariaDB
 -- PHP Version: 8.2.4
 
@@ -20,6 +20,17 @@ SET time_zone = "+00:00";
 --
 -- Database: `2024_qvintus`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `stock_status`
+--
+
+CREATE TABLE `stock_status` (
+  `id_stock` int(11) NOT NULL,
+  `stock_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -43,16 +54,31 @@ CREATE TABLE `table_bocker` (
   `sprak_fk` int(11) NOT NULL,
   `status_fk` int(11) NOT NULL,
   `skapad_av_fk` int(11) NOT NULL,
-  `bok_img` varchar(255) NOT NULL
+  `bok_img` varchar(255) NOT NULL,
+  `stock_fk` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `table_bocker`
 --
 
-INSERT INTO `table_bocker` (`id_bok`, `titel`, `beskrivning`, `aldersrekommendation`, `utgiven`, `sidor`, `pris`, `serie_fk`, `forfattare_fk`, `form_eller_illu_fk`, `kategori_fk`, `genre_fk`, `sprak_fk`, `status_fk`, `skapad_av_fk`, `bok_img`) VALUES
-(10, 'tet', 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. In non lacus a orci hendrerit consectetur non ac arcu. Vestibulum tempor lobortis imperdiet. Aenean sit amet tortor sagittis, feugiat libero sit amet, pretium mi. Donec quis volutpat ante, et fringilla nunc. Sed et felis consequat lorem venenatis ultricies vel et mi. Phasellus dapibus vestibulum mi sollicitudin faucibus. Praesent justo libero, cursus in purus vitae, commodo feugiat metus. Pellentesque nisl felis, elementum at ultrices ac, feugiat tristique sem. Donec mollis enim ligula, eu fringilla risus facilisis pulvinar. Donec id ultrices libero, vitae lobortis justo. Praesent at vulputate sem. Praesent id dui id urna efficitur viverra in interdum nunc. Mauris eu nibh laoreet, convallis diam ac, imperdiet magna. Nullam nisi lectus, semper vestibulum turpis vel, sagittis mollis eros.\r\n\r\nDonec sed lorem magna. Praesent at molestie felis, id pretium ligula. Etiam hendrerit nisi eu faucibus cursus. Nunc nec tellus vel sem venenatis mollis. Proin ac ', '121', '2024-11-21', '121', 2212, 1, 1, 1, 7, 2, 1, 2, 2, 'download.jpg'),
-(11, 'öka', 'descriptan', '21-21', '2024-11-19', '392', 522, 2, 1, 1, 8, 2, 1, 2, 2, 'marbles-1659398_1280.jpg');
+INSERT INTO `table_bocker` (`id_bok`, `titel`, `beskrivning`, `aldersrekommendation`, `utgiven`, `sidor`, `pris`, `serie_fk`, `forfattare_fk`, `form_eller_illu_fk`, `kategori_fk`, `genre_fk`, `sprak_fk`, `status_fk`, `skapad_av_fk`, `bok_img`, `stock_fk`) VALUES
+(52, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(53, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(54, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(55, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(56, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(57, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(58, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(59, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(60, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(61, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(62, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(63, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(64, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(65, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(66, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1),
+(67, 'eqe', 'qeqe', '12', '2024-12-10', '21', 21, 1, 1, 1, 7, 3, 1, 1, 2, '1685531648370_99becb22-519a-4375-a25b-6d9cbdf6ed4f.jpg', 1);
 
 -- --------------------------------------------------------
 
@@ -127,8 +153,35 @@ CREATE TABLE `table_genre` (
 --
 
 INSERT INTO `table_genre` (`id_genre`, `genre_namn`) VALUES
-(2, 'genre85345'),
-(3, 'gen43re');
+(3, 'gen43re'),
+(5, 'te'),
+(6, 'ne');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `table_history`
+--
+
+CREATE TABLE `table_history` (
+  `id_history` int(11) NOT NULL,
+  `history_title` varchar(255) NOT NULL,
+  `history_desc` varchar(510) NOT NULL,
+  `history_img` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `table_history`
+--
+
+INSERT INTO `table_history` (`id_history`, `history_title`, `history_desc`, `history_img`) VALUES
+(1, 'titel', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(2, 'titel', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(3, 'titel', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(4, 'titel', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(5, 'titel', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(6, 'newst', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png'),
+(7, 'lnew', 'des', '25c634df-c2dc-419a-ba03-96bd106a7b59.png');
 
 -- --------------------------------------------------------
 
@@ -207,8 +260,26 @@ CREATE TABLE `table_status` (
 
 INSERT INTO `table_status` (`id_status`, `status_namn`) VALUES
 (1, 'Rare'),
-(2, 'Popular'),
 (3, 'Popular right now!');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `table_stock`
+--
+
+CREATE TABLE `table_stock` (
+  `id_stock` int(11) NOT NULL,
+  `stock_name` varchar(255) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `table_stock`
+--
+
+INSERT INTO `table_stock` (`id_stock`, `stock_name`) VALUES
+(1, 'In stock'),
+(2, 'Out of stock');
 
 -- --------------------------------------------------------
 
@@ -229,11 +300,18 @@ CREATE TABLE `table_users` (
 --
 
 INSERT INTO `table_users` (`u_id`, `u_name`, `u_password`, `u_email`, `u_role_fk`) VALUES
-(2, 'kevin', '$2y$10$hvC3Lt5CXX8OzYOC22c7LeMBT/VujjzkxGPVTUJd/De864mBoUgfW', 'apa233@gmail.com', 1);
+(2, 'kevin', '$2y$10$hvC3Lt5CXX8OzYOC22c7LeMBT/VujjzkxGPVTUJd/De864mBoUgfW', 'apa233@gmail.com', 1),
+(3, 'kevintest', '$2y$10$He8OkYPlsdr3j6II2a96Gexy/1CPKyNiZqEhqDepZWW6oYQypqI22', '1@gmail.com', 1);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `stock_status`
+--
+ALTER TABLE `stock_status`
+  ADD PRIMARY KEY (`id_stock`);
 
 --
 -- Indexes for table `table_bocker`
@@ -241,13 +319,14 @@ INSERT INTO `table_users` (`u_id`, `u_name`, `u_password`, `u_email`, `u_role_fk
 ALTER TABLE `table_bocker`
   ADD PRIMARY KEY (`id_bok`),
   ADD KEY `serie_fk` (`serie_fk`,`forfattare_fk`,`form_eller_illu_fk`,`kategori_fk`,`genre_fk`,`sprak_fk`,`status_fk`,`skapad_av_fk`),
+  ADD KEY `fk11` (`form_eller_illu_fk`),
   ADD KEY `fk2` (`kategori_fk`),
   ADD KEY `fk3` (`forfattare_fk`),
+  ADD KEY `fk4` (`genre_fk`),
   ADD KEY `fk5` (`sprak_fk`),
+  ADD KEY `fk6` (`status_fk`),
   ADD KEY `fk7` (`skapad_av_fk`),
-  ADD KEY `fk10` (`status_fk`),
-  ADD KEY `fk11` (`form_eller_illu_fk`),
-  ADD KEY `fk4` (`genre_fk`);
+  ADD KEY `fk33` (`stock_fk`);
 
 --
 -- Indexes for table `table_category`
@@ -274,6 +353,12 @@ ALTER TABLE `table_genre`
   ADD PRIMARY KEY (`id_genre`);
 
 --
+-- Indexes for table `table_history`
+--
+ALTER TABLE `table_history`
+  ADD PRIMARY KEY (`id_history`);
+
+--
 -- Indexes for table `table_roles`
 --
 ALTER TABLE `table_roles`
@@ -298,6 +383,12 @@ ALTER TABLE `table_status`
   ADD PRIMARY KEY (`id_status`);
 
 --
+-- Indexes for table `table_stock`
+--
+ALTER TABLE `table_stock`
+  ADD PRIMARY KEY (`id_stock`);
+
+--
 -- Indexes for table `table_users`
 --
 ALTER TABLE `table_users`
@@ -309,10 +400,16 @@ ALTER TABLE `table_users`
 --
 
 --
+-- AUTO_INCREMENT for table `stock_status`
+--
+ALTER TABLE `stock_status`
+  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `table_bocker`
 --
 ALTER TABLE `table_bocker`
-  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id_bok` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
 -- AUTO_INCREMENT for table `table_category`
@@ -336,7 +433,13 @@ ALTER TABLE `table_form`
 -- AUTO_INCREMENT for table `table_genre`
 --
 ALTER TABLE `table_genre`
-  MODIFY `id_genre` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_genre` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT for table `table_history`
+--
+ALTER TABLE `table_history`
+  MODIFY `id_history` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `table_roles`
@@ -363,10 +466,16 @@ ALTER TABLE `table_status`
   MODIFY `id_status` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
+-- AUTO_INCREMENT for table `table_stock`
+--
+ALTER TABLE `table_stock`
+  MODIFY `id_stock` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
 -- AUTO_INCREMENT for table `table_users`
 --
 ALTER TABLE `table_users`
-  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `u_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- Constraints for dumped tables
@@ -381,6 +490,7 @@ ALTER TABLE `table_bocker`
   ADD CONSTRAINT `fk11` FOREIGN KEY (`form_eller_illu_fk`) REFERENCES `table_form` (`id_form_eller_illu`),
   ADD CONSTRAINT `fk2` FOREIGN KEY (`kategori_fk`) REFERENCES `table_category` (`id_kategori`),
   ADD CONSTRAINT `fk3` FOREIGN KEY (`forfattare_fk`) REFERENCES `table_forfattare` (`id_forfattare`),
+  ADD CONSTRAINT `fk33` FOREIGN KEY (`stock_fk`) REFERENCES `table_stock` (`id_stock`),
   ADD CONSTRAINT `fk4` FOREIGN KEY (`genre_fk`) REFERENCES `table_genre` (`id_genre`),
   ADD CONSTRAINT `fk5` FOREIGN KEY (`sprak_fk`) REFERENCES `table_spark` (`id_sprak`),
   ADD CONSTRAINT `fk6` FOREIGN KEY (`status_fk`) REFERENCES `table_status` (`id_status`),

@@ -26,12 +26,7 @@ $cards = [
         'title' => 'Card Title 4',
         'text' => 'This is a short description for card 4.',
         'image' => 'https://via.placeholder.com/150/ffa500', 
-    ],
-    [
-        'title' => 'Card Title 5',
-        'text' => 'This is a short description for card 5.',
-        'image' => 'https://via.placeholder.com/150/ba55d3', 
-    ],
+    ]
 ];
 
 ?>
@@ -72,7 +67,7 @@ $cards = [
 <div class="container mt-5">
     <div class="row justify-content-center">
         <?php foreach ($cards as $card): ?>
-        <div class="col-2 mb-3">
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
             <div class="card h-100">
                 <img src="<?php echo htmlspecialchars($card['image']); ?>" class="card-img-top" alt="Card Image">
                 <div class="card-body">
@@ -130,39 +125,6 @@ In eget arcu viverra, ultrices felis vitae, tincidunt diam.  Cras dignissim diam
             <?php endforeach; ?>
         </div>
     </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
