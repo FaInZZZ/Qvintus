@@ -4,10 +4,7 @@ include_once 'includes/header.php';
 
 $bookid = isset($_GET['BookID']) ? $_GET['BookID'] : 0;
 
-
 $getSingleBookInformation = getSingleBookInformation($pdo, $bookid);
-
-
 
 ?>
 
@@ -49,10 +46,16 @@ $getSingleBookInformation = getSingleBookInformation($pdo, $bookid);
                         <li><strong>Release:</strong> <?php echo htmlspecialchars($getSingleBookInformation['utgiven']); ?></li>
                         <li><strong>Language:</strong> <?php echo htmlspecialchars($getSingleBookInformation['sprak_namn']); ?></li>
                         <li><strong>Price:</strong> <?php echo htmlspecialchars($getSingleBookInformation['pris']); ?>€</li>
-                        <li><strong>Genre:</strong> <?php echo htmlspecialchars($getSingleBookInformation['genre_namn']); ?></li>
+                        <li><strong>Genre:</strong> 
+                            <?php if (!empty($getSingleBookInformation['genres'])): ?>
+                                <?php echo htmlspecialchars(implode(', ', $getSingleBookInformation['genres'])); ?>
+                            <?php else: ?>
+                                No genres available
+                            <?php endif; ?>
+                        </li>
                         <li><strong>Designer:</strong> <?php echo htmlspecialchars($getSingleBookInformation['form_eller_illu_namn']); ?></li>
                         <li><strong>Status:</strong> <?php echo htmlspecialchars($getSingleBookInformation['status_namn']); ?></li>
-                        <li><strong>Age recommendation:</strong> <?php echo htmlspecialchars($getSingleBookInformation['aldersrekommendation']); ?></li>
+                        <li><strong>Age recommendation:</strong> <?php echo htmlspecialchars($getSingleBookInformation['age_name']); ?></li>
                         <li><strong>Serie:</strong> <?php echo htmlspecialchars($getSingleBookInformation['serie_namn']); ?></li>
                         <li><strong>Publisher:</strong> <?php echo htmlspecialchars($getSingleBookInformation['u_name']); ?></li>
                     </ul>
