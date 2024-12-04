@@ -13,6 +13,7 @@ $getLanguageInformation = getLanguageInformation($pdo);
 $getStatusInformation = getStatusInformation($pdo);
 $getDesignerInformation = getDesignerInformation($pdo);
 $getStockInformation = getStockInformation($pdo);
+$getAgeInformation = getAgeInformation($pdo);
 
 
 
@@ -67,8 +68,15 @@ if(isset($_POST['submitnb'])) {
         </div>
 
         <div class="mb-3">
-            <label for="age_recommendation" class="form-label">Åldersrekommendation:</label>
-            <input type="text" class="form-control" id="age_recommendation" name="age_recommendation" required>
+            <label for="ageSelect" class="form-label">Select Age</label>
+            <select id="ageSelect" name="id_age" class="form-select w-100">
+                <option value="">Choose Age</option>
+                <?php foreach ($getAgeInformation as $row): ?>
+                    <option value="<?php echo $row['id_age']; ?>">
+                        <?php echo $row['age_name']; ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
         </div>
 
         <div class="mb-3">
@@ -96,16 +104,15 @@ if(isset($_POST['submitnb'])) {
         </div>
 
         <div class="mb-3">
-            <label for="GenreSelect" class="form-label">Select Genre</label>
-            <select id="GenreSelect" name="id_genre" class="form-select w-100">
-                <option value="">Choose a Genre</option>
-                <?php foreach ($getGenreInformation as $row): ?>
-                    <option value="<?php echo $row['id_genre']; ?>">
-                        <?php echo $row['genre_namn']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <label for="GenreSelect" class="form-label">Select Genre(s)</label>
+    <select id="GenreSelect" name="id_genre[]" class="form-select w-100" multiple>
+        <?php foreach ($getGenreInformation as $row): ?>
+            <option value="<?php echo $row['id_genre']; ?>">
+                <?php echo $row['genre_name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
         <div class="mb-3">
             <label for="SerieSelect" class="form-label">Select Serie</label>
@@ -206,7 +213,12 @@ if(isset($_POST['submitnb'])) {
     $('#DesignerSelect').select2();  
   });
 
-
+  $(document).ready(function() {
+        $('#GenreSelect').select2({
+            placeholder: "Choose Genres",
+            allowClear: true
+        });
+    });
   
 </script>
 

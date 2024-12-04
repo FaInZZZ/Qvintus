@@ -25,6 +25,7 @@ if (isset($_POST['deleteGenre'])) {
 }
 ?>
 
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
