@@ -8,7 +8,7 @@ $bookid = isset($_GET['BookID']) ? $_GET['BookID'] : 0;
 $getSingleBookInformation = getSingleBookInformation($pdo, $bookid);
 
 
-$user->checkLoginStatus();
+
 ?>
 
 <!DOCTYPE html>

@@ -35,6 +35,10 @@
     border: 1px solid #8a7336 !important; 
 }
 
+.custom-bg {
+    background-color: #8a7336 !important;  
+}
+
 .custom-btn:hover {
     background-color: #594b24 !important;  
     border-color: #594b24 !important;
@@ -49,4 +53,8 @@
     background-color: black !important;  
     border-color: black !important;
 	color: white !important;
+}
+
+.text-color-cus {
+	color:#594b24 !important;
 }

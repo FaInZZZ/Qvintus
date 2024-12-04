@@ -2,25 +2,25 @@
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
 
-if (isset($_POST['cgenre'])) {
-    $genreName = $_POST['genreName'];
-    if (!empty($genreName)) {
-        createGenre($pdo, $genreName); 
+if (isset($_POST['cserie'])) {
+    $serieName = $_POST['serieName'];
+    if (!empty($serieName)) {
+        createserie($pdo, $serieName); 
     }
 }
 
-if (isset($_POST['editGenre'])) {
-    $genreId = $_POST['genreId'];
+if (isset($_POST['editserie'])) {
+    $serieId = $_POST['serieId'];
     $updatedName = $_POST['updatedName'];
-    if (!empty($updatedName) && !empty($genreId)) {
-        updateGenre($pdo, $genreId, $updatedName);
+    if (!empty($updatedName) && !empty($serieId)) {
+        updateserie($pdo, $serieId, $updatedName);
     }
 }
 
-if (isset($_POST['deleteGenre'])) {
-    $genreId = $_POST['genreId'];
-    if (!empty($genreId)) {
-        deleteGenre($pdo, $genreId);
+if (isset($_POST['deleteserie'])) {
+    $serieId = $_POST['serieId'];
+    if (!empty($serieId)) {
+        deleteserie($pdo, $serieId);
     }
 }
 ?>
@@ -28,20 +28,20 @@ if (isset($_POST['deleteGenre'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/css/style.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manage Genres</title>
+    <title>Manage series</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
     <div class="container mt-5">
         <div class="d-flex justify-content-around align-items-center mb-4 flex-wrap">
-            <h1 class="text-color-cus">Manage Genres</h1>
+            <h1 class="text">Manage Series</h1>
             <div>
-                <button type="button" class="btn custom-btn btn-lg me-3 w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create Genre</button>
-                <button type="button" class="btn btn-secondary btn-lg w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit Genre</button>
+                <button type="button" class="btn custom-btn btn-lg me-3 w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create serie</button>
+                <button type="button" class="btn btn-secondary btn-lg w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit serie</button>
             </div>
         </div>
     </div>
@@ -50,19 +50,19 @@ if (isset($_POST['deleteGenre'])) {
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="modalCreateLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header custom-bg ">
-                    <h5 class="modal-title text-white" id="modalCreateLabel">Create Genre</h5>
+                <div class="modal-header custom-bg">
+                    <h5 class="modal-title text-white" id="modalCreateLabel">Create serie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="">
                     <div class="modal-body">
                         <div class="mb-3">
-                            <label for="genreName" class="form-label">Genre Name</label>
-                            <input type="text" class="form-control" id="genreName" name="genreName" placeholder="Enter genre name" required>
+                            <label for="serieName" class="form-label">serie</label>
+                            <input type="text" class="form-control" id="serieName" name="serieName" placeholder="Enter serie name" required>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" name="cgenre" class="btn custom-btn btn-lg w-100">Create</button>
+                        <button type="submit" name="cserie" class="btn custom-btn btn-lg w-100">Create</button>
                         <button type="button" class="btn btn-secondary btn-lg w-100" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
@@ -75,12 +75,12 @@ if (isset($_POST['deleteGenre'])) {
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-secondary text-white">
-                    <h5 class="modal-title" id="modalEditLabel">Edit Genre</h5>
+                    <h5 class="modal-title" id="modalEditLabel">Edit serie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="text" id="searchGenre" placeholder="Search for genres..." class="form-control mb-3">
-                    <div id="resultGenre" class="row"></div>
+                    <input type="text" id="searchserie" placeholder="Search for Series" class="form-control mb-3">
+                    <div id="resultserie" class="row"></div>
                 </div>
             </div>
         </div>
@@ -91,21 +91,21 @@ if (isset($_POST['deleteGenre'])) {
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header bg-warning text-white">
-                    <h5 class="modal-title" id="modalEditFormLabel">Edit Genre</h5>
+                    <h5 class="modal-title" id="modalEditFormLabel">Edit serie</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <form method="POST" action="">
                     <div class="modal-body">
-                        <input type="hidden" id="genreId" name="genreId">
+                        <input type="hidden" id="serieId" name="serieId">
                         <div class="mb-3">
-                            <label for="updatedName" class="form-label">Updated Genre Name</label>
+                            <label for="updatedName" class="form-label">Updated serie Name</label>
                             <input type="text" class="form-control" id="updatedName" name="updatedName" required>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" name="editGenre" class="btn custom-btn btn-lg w-100">Save Changes</button>
-                        <button type="submit" name="deleteGenre" class="btn btn-danger btn-lg w-100">Delete</button>
-
+                        <button type="submit" name="editserie" class="btn custom-btn btn-lg w-100">Save Changes</button>
+                        <button type="submit" name="deleteserie" class="btn btn-danger btn-lg w-100">Delete</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
                 </form>
             </div>
@@ -114,27 +114,27 @@ if (isset($_POST['deleteGenre'])) {
 
     <script>
         $(document).ready(function() {
-            $("#searchGenre").on("input", function() {
+            $("#searchserie").on("input", function() {
                 var query = $(this).val();
                 if (query != "") {
                     $.ajax({
-                        url: "includes/searchgenre.php",
+                        url: "includes/searchserie.php",
                         method: "GET",
                         data: { search: query },
                         success: function(response) {
-                            $("#resultGenre").html(response);
+                            $("#resultserie").html(response);
                             $(".edit-btn").on("click", function() {
-                                var genreId = $(this).data("id");
-                                var genreName = $(this).data("name");
-                                $("#genreId").val(genreId);
-                                $("#updatedName").val(genreName);
+                                var serieId = $(this).data("id");
+                                var serieName = $(this).data("name");
+                                $("#serieId").val(serieId);
+                                $("#updatedName").val(serieName);
                                 $("#modalEdit").modal('hide');
                                 $("#modalEditForm").modal('show');
                             });
                         }
                     });
                 } else {
-                    $("#resultGenre").html("");
+                    $("#resultserie").html("");
                 }
             });
         });

@@ -21,7 +21,7 @@ include_once 'includes/header.php';
         <h1>Book dashboard</h1>
         </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-category.php" class="card text-center">
+                <a href="d-category.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Category</h5>
                     </div>
@@ -35,7 +35,7 @@ include_once 'includes/header.php';
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-serie.php" class="card text-center">
+                <a href="d-serie.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Serie</h5>
                     </div>
