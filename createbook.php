@@ -91,17 +91,18 @@ if(isset($_POST['submitnb'])) {
             </select>
         </div>
 
+ 
+
         <div class="mb-3">
-            <label for="AuthorSelect" class="form-label">Select Author</label>
-            <select id="AuthorSelect" name="id_author" class="form-select w-100">
-                <option value="">Choose a Author</option>
-                <?php foreach ($getAuthorInformation as $row): ?>
-                    <option value="<?php echo $row['id_forfattare']; ?>">
-                        <?php echo $row['forfattare_namn']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <label for="authorSelect" class="form-label">Select Author(s)</label>
+    <select id="authorSelect" name="id_author[]" class="form-select w-100" multiple>
+        <?php foreach ($getAuthorInformation as $row): ?>
+            <option value="<?php echo $row['id_forfattare']; ?>">
+                <?php echo $row['forfattare_namn']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
         <div class="mb-3">
     <label for="GenreSelect" class="form-label">Select Genre(s)</label>
@@ -215,6 +216,13 @@ if(isset($_POST['submitnb'])) {
 
   $(document).ready(function() {
         $('#GenreSelect').select2({
+            placeholder: "Choose Genres",
+            allowClear: true
+        });
+    });
+
+    $(document).ready(function() {
+        $('#authorSelect').select2({
             placeholder: "Choose Genres",
             allowClear: true
         });

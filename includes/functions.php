@@ -5,12 +5,12 @@ $user = new User($pdo);
 
 
 function getSingleBookInformation($pdo, $bookid) {
+    // Fetch main book data
     $stmt_getBookdata = $pdo->prepare('
         SELECT 
             table_bocker.*, 
             table_users.u_name,
             table_spark.sprak_namn,
-            table_forfattare.forfattare_namn,
             table_form.form_eller_illu_namn,
             table_status.status_namn,
             table_serie.serie_namn,
@@ -25,10 +25,6 @@ function getSingleBookInformation($pdo, $bookid) {
             table_spark
         ON
             table_bocker.sprak_fk = table_spark.id_sprak
-        INNER JOIN 
-            table_forfattare
-        ON
-            table_bocker.forfattare_fk = table_forfattare.id_forfattare
         INNER JOIN 
             table_form
         ON
@@ -51,9 +47,14 @@ function getSingleBookInformation($pdo, $bookid) {
 
     $stmt_getBookdata->bindParam(':bookid', $bookid, PDO::PARAM_INT);
     $stmt_getBookdata->execute();
+    $bookData = $stmt_getBookdata->fetch(PDO::FETCH_ASSOC);
 
-    $bookData = $stmt_getBookdata->fetch(PDO::FETCH_ASSOC); 
+    if (!$bookData) {
+        // If no book is found, return null
+        return null;
+    }
 
+    // Fetch genres
     $stmt_getGenres = $pdo->prepare('
         SELECT 
             table_genre.genre_name
@@ -70,13 +71,30 @@ function getSingleBookInformation($pdo, $bookid) {
     $stmt_getGenres->bindParam(':bookid', $bookid, PDO::PARAM_INT);
     $stmt_getGenres->execute();
     $genres = $stmt_getGenres->fetchAll(PDO::FETCH_COLUMN);
+    $bookData['genres'] = $genres;
 
-    if ($bookData) {
-        $bookData['genres'] = $genres;
-    }
+    // Fetch authors
+    $stmt_getAuthors = $pdo->prepare('
+        SELECT 
+            table_forfattare.forfattare_namn
+        FROM 
+            book_author
+        INNER JOIN 
+            table_forfattare
+        ON 
+            book_author.id_author = table_forfattare.id_forfattare
+        WHERE 
+            book_author.book_id = :bookid
+    ');
+
+    $stmt_getAuthors->bindParam(':bookid', $bookid, PDO::PARAM_INT);
+    $stmt_getAuthors->execute();
+    $authors = $stmt_getAuthors->fetchAll(PDO::FETCH_COLUMN);
+    $bookData['authors'] = $authors;
 
     return $bookData;
 }
+
 
 
 function getSingleBook($pdo, $bookID) {
@@ -226,13 +244,11 @@ function getStockInformation($pdo) {
 }
 
 function getAuthorInformation($pdo) {
-    $stmt_getAuthordata = $pdo->prepare('
-        SELECT * 
-        FROM table_forfattare');
-    $stmt_getAuthordata->execute();
+    $stmt_getAuthordata = $pdo->prepare('SELECT id_forfattare, forfattare_namn FROM table_forfattare');
     
-
-    return $stmt_getAuthordata->fetchAll(PDO::FETCH_ASSOC);
+    $stmt_getAuthordata->execute();
+    $Authors = $stmt_getAuthordata->fetchAll(PDO::FETCH_ASSOC);
+    return $Authors;
 }
 
 function getAgeInformation($pdo) {
@@ -361,8 +377,8 @@ function insertNewBook($pdo) {
     $bookimg = basename($_FILES['book_img']['name']);
 
     // Insert the book details into table_bocker
-    $stmt_insertNewBook = $pdo->prepare('INSERT INTO table_bocker (titel, beskrivning, age_fk, utgiven, sidor, pris, serie_fk, forfattare_fk, form_eller_illu_fk, kategori_fk, sprak_fk, status_fk, skapad_av_fk, bok_img, stock_fk) 
-        VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :forfattare_fk, :form_eller_illu_fk, :kategori_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img, :stock_fk)');
+    $stmt_insertNewBook = $pdo->prepare('INSERT INTO table_bocker (titel, beskrivning, age_fk, utgiven, sidor, pris, serie_fk, form_eller_illu_fk, kategori_fk, sprak_fk, status_fk, skapad_av_fk, bok_img, stock_fk) 
+        VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :form_eller_illu_fk, :kategori_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img, :stock_fk)');
 
     $stmt_insertNewBook->bindParam(":titel", $_POST['title'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":beskrivning", $_POST['description'], PDO::PARAM_STR);
@@ -371,7 +387,6 @@ function insertNewBook($pdo) {
     $stmt_insertNewBook->bindParam(":sidor", $_POST['pages'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":pris", $_POST['price'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":serie_fk", $_POST['id_Serie'], PDO::PARAM_INT);
-    $stmt_insertNewBook->bindParam(":forfattare_fk", $_POST['id_author'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":form_eller_illu_fk", $_POST['id_Designer'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":kategori_fk", $_POST['id_kategori'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":sprak_fk", $_POST['id_Language'], PDO::PARAM_INT); 
@@ -382,10 +397,8 @@ function insertNewBook($pdo) {
 
     $stmt_insertNewBook->execute();
 
-    // Get the last inserted book ID
     $book_id = $pdo->lastInsertId();
 
-    // Insert genres into book_genre table
     if (isset($_POST['id_genre']) && is_array($_POST['id_genre'])) {
         $stmt_insertGenres = $pdo->prepare('INSERT INTO book_genre (book_id, genre_id) VALUES (:book_id, :genre_id)');
 
@@ -395,6 +408,18 @@ function insertNewBook($pdo) {
             $stmt_insertGenres->execute();
         }
     }
+
+    if (isset($_POST['id_author']) && is_array($_POST['id_author'])) {
+        $stmt_insertAuthor = $pdo->prepare('INSERT INTO book_author (id_book, id_author) VALUES (:book_id, :author_id)');
+    
+        foreach ($_POST['id_author'] as $author_id) {
+            $stmt_insertAuthor->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+            $stmt_insertAuthor->bindParam(':author_id', $author_id, PDO::PARAM_INT);
+            $stmt_insertAuthor->execute();
+        }
+    }
+    
+
 }
 
 
