@@ -42,21 +42,21 @@ include_once 'includes/header.php';
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-age.php" class="card text-center">
+                <a href="d-age.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Age recommendation</h5>
                     </div>
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-author.php" class="card text-center">
+                <a href="d-author.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Author</h5>
                     </div>
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-designer.php" class="card text-center">
+                <a href="d-designer.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Designer</h5>
                     </div>
@@ -70,7 +70,7 @@ include_once 'includes/header.php';
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="dashboard-items/d-language.php" class="card text-center">
+                <a href="d-lan.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Language</h5>
                     </div>
