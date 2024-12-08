@@ -9,8 +9,8 @@ $bookid = isset($_GET['statusid']) ? $_GET['statusid'] : 0;
 if ($bookid == 1) {
     $getRareBooks = getRareBook($pdo);
 } elseif ($bookid == 3) {
-    $getPopularRNBooks = getPopularRNBook($pdo);
-} else {
+    $getpopularbooks = getPopularBook($pdo);
+    }   else {
     echo "Invalid status";
 
 }
@@ -40,7 +40,7 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '        <div class="col-md-7 d-flex flex-column">';  
         echo '            <div class="card-body">';
         echo '                <h3 class="card-title">' . htmlspecialchars($book['titel']) . '</h3>'; 
-        echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['forfattare_namn']) . '</p>'; 
+        echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['authors']) . '</p>'; 
         echo '                <p class="card-text fs-6"><small class="text-muted">Published: ' . htmlspecialchars($book['utgiven']) . '</small></p>';
         echo '                <p class="card-text">' . htmlspecialchars($book['beskrivning']) . '</p>'; 
         echo '            </div>';
@@ -49,10 +49,9 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '    </div>';
         echo '</div>';
     }
-
-} elseif ($bookid == 3 && isset($getPopularRNBooks)) {
-    echo "<h2 class='my-4 text-center'>Popular RN Books</h2>";
-    foreach ($getPopularRNBooks as $book) {
+} elseif (isset($getpopularbooks)) { 
+    echo "<h2 class='my-4 text-center'>Popular Books</h2>"; 
+    foreach ($getpopularbooks as $book) {
         echo '<div class="card mb-5 mx-auto" style="max-width: 900px;">'; 
         echo '    <div class="row g-0">';
         echo '        <div class="col-md-5">'; 
@@ -61,7 +60,7 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '        <div class="col-md-7 d-flex flex-column">';  
         echo '            <div class="card-body">';
         echo '                <h3 class="card-title">' . htmlspecialchars($book['titel']) . '</h3>'; 
-        echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['forfattare_namn']) . '</p>'; 
+        echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['authors']) . '</p>'; 
         echo '                <p class="card-text fs-6"><small class="text-muted">Published: ' . htmlspecialchars($book['utgiven']) . '</small></p>';
         echo '                <p class="card-text">' . htmlspecialchars($book['beskrivning']) . '</p>'; 
         echo '            </div>';
@@ -70,7 +69,12 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '    </div>';
         echo '</div>';
     }
+} else {
+    echo "<h2 class='my-4 text-center'>No Books Found</h2>";
 }
+
+
+
 ?>
 
 

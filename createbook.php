@@ -3,26 +3,21 @@ include_once 'includes/functions.php';
 include_once 'includes/header.php';
 $user->checkLoginStatus();
 
-
-
 $getCategoryInformation = getCategoryInformation($pdo);
 $getAuthorInformation = getAuthorInformation($pdo);
 $getGenreInformation = getGenreInformation($pdo);
 $getSerieInformation = getSerieInformation($pdo);
 $getLanguageInformation = getLanguageInformation($pdo);
 $getStatusInformation = getStatusInformation($pdo);
-$getDesignerInformation = getDesignerInformation($pdo);
+$getDesignerInformation = getDesignerInformation($pdo); 
 $getStockInformation = getStockInformation($pdo);
 $getAgeInformation = getAgeInformation($pdo);
 
-
-
-if(isset($_POST['submitnb'])) {
+if (isset($_POST['submitnb'])) {
     $submitNewBook = insertNewBook($pdo);
 }
-
-
 ?>
+
 
 
 <!DOCTYPE html>
@@ -141,16 +136,15 @@ if(isset($_POST['submitnb'])) {
 
 
         <div class="mb-3">
-            <label for="DesignerSelect" class="form-label">Select Designer or illustrator</label>
-            <select id="DesignerSelect" name="id_Designer" class="form-select w-100">
-                <option value="">Choose a Designer or illustrator</option>
-                <?php foreach ($getDesignerInformation as $row): ?>
-                    <option value="<?php echo $row['id_form_eller_illu']; ?>">
-                        <?php echo $row['form_eller_illu_namn']; ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
+    <label for="DesignerSelect" class="form-label">Select Designer(s)</label>
+    <select id="DesignerSelect" name="id_designer[]" class="form-select w-100" multiple>
+        <?php foreach ($getDesignerInformation as $row): ?>
+            <option value="<?php echo $row['id_designer']; ?>">
+                <?php echo $row['designer_name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
 
         <div class="mb-3">
             <label for="date" class="form-label">Date:</label>
@@ -227,6 +221,14 @@ if(isset($_POST['submitnb'])) {
             allowClear: true
         });
     });
+
+    $(document).ready(function() {
+    $('#DesignerSelect').select2({
+        placeholder: "Choose Designers",
+        allowClear: true
+    });
+});
+
   
 </script>
 

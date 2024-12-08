@@ -63,7 +63,13 @@ if (!$getSingleBookInformation) {
                                 No genres available
                             <?php endif; ?>
                         </li>
-                        <li><strong>Designer:</strong> <?php echo htmlspecialchars($getSingleBookInformation['form_eller_illu_namn']); ?></li>
+                        <li><strong>Designer:</strong> 
+                            <?php if (!empty($getSingleBookInformation['designers'])): ?>
+                                <?php echo htmlspecialchars(implode(', ', $getSingleBookInformation['designers'])); ?>
+                            <?php else: ?>
+                                No designers available
+                            <?php endif; ?>
+                        </li>
                         <li><strong>Status:</strong> <?php echo htmlspecialchars($getSingleBookInformation['status_namn']); ?></li>
                         <li><strong>Age recommendation:</strong> <?php echo htmlspecialchars($getSingleBookInformation['age_name']); ?></li>
                         <li><strong>Serie:</strong> <?php echo htmlspecialchars($getSingleBookInformation['serie_namn']); ?></li>

@@ -11,7 +11,6 @@ function getSingleBookInformation($pdo, $bookid) {
             table_bocker.*, 
             table_users.u_name,
             table_spark.sprak_namn,
-            table_form.form_eller_illu_namn,
             table_status.status_namn,
             table_serie.serie_namn,
             table_age.age_name
@@ -25,10 +24,6 @@ function getSingleBookInformation($pdo, $bookid) {
             table_spark
         ON
             table_bocker.sprak_fk = table_spark.id_sprak
-        INNER JOIN 
-            table_form
-        ON
-            table_bocker.form_eller_illu_fk = table_form.id_form_eller_illu
         INNER JOIN 
             table_age
         ON
@@ -50,11 +45,10 @@ function getSingleBookInformation($pdo, $bookid) {
     $bookData = $stmt_getBookdata->fetch(PDO::FETCH_ASSOC);
 
     if (!$bookData) {
-        // If no book is found, return null
         return null;
     }
 
-    // Fetch genres
+
     $stmt_getGenres = $pdo->prepare('
         SELECT 
             table_genre.genre_name
@@ -73,7 +67,6 @@ function getSingleBookInformation($pdo, $bookid) {
     $genres = $stmt_getGenres->fetchAll(PDO::FETCH_COLUMN);
     $bookData['genres'] = $genres;
 
-    // Fetch authors
     $stmt_getAuthors = $pdo->prepare('
         SELECT 
             table_forfattare.forfattare_namn
@@ -84,7 +77,7 @@ function getSingleBookInformation($pdo, $bookid) {
         ON 
             book_author.id_author = table_forfattare.id_forfattare
         WHERE 
-            book_author.book_id = :bookid
+            book_author.id_book = :bookid
     ');
 
     $stmt_getAuthors->bindParam(':bookid', $bookid, PDO::PARAM_INT);
@@ -92,8 +85,33 @@ function getSingleBookInformation($pdo, $bookid) {
     $authors = $stmt_getAuthors->fetchAll(PDO::FETCH_COLUMN);
     $bookData['authors'] = $authors;
 
+    $stmt_getGenres->bindParam(':bookid', $bookid, PDO::PARAM_INT);
+    $stmt_getGenres->execute();
+    $genres = $stmt_getGenres->fetchAll(PDO::FETCH_COLUMN);
+    $bookData['genres'] = $genres;
+
+    $stmt_getDesigners = $pdo->prepare('
+    SELECT 
+        table_designer.designer_name
+    FROM 
+        book_designer
+    INNER JOIN 
+        table_designer
+    ON 
+        book_designer.id_designer = table_designer.id_designer
+    WHERE 
+        book_designer.id_book = :bookid
+');
+
+$stmt_getDesigners->bindParam(':bookid', $bookid, PDO::PARAM_INT);
+$stmt_getDesigners->execute();
+$designers = $stmt_getDesigners->fetchAll(PDO::FETCH_COLUMN);
+$bookData['designers'] = $designers;
+
+
     return $bookData;
 }
+
 
 
 
@@ -274,62 +292,280 @@ function getGenreInformation($pdo) {
 
 
 
-function createGenre($pdo, $genreName) {
-    $stmt = $pdo->prepare('INSERT INTO table_genre (genre_name) VALUES (:genre_name)');
+function createGenre($pdo, $genreName, $isPopular) {
+    $status = $isPopular ? 3 : 4;
+
+    $stmt = $pdo->prepare('INSERT INTO table_genre (genre_name, p_status_fk) VALUES (:genre_name, :p_status_fk)');
     $stmt->bindParam(':genre_name', $genreName, PDO::PARAM_STR);
-    $stmt->execute();
+    $stmt->bindParam(':p_status_fk', $status, PDO::PARAM_INT);
+
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Genre successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create genre.</div>';
+    }
 }
 
-function updateGenre($pdo, $genreId, $updatedName) {
-    $stmt = $pdo->prepare("UPDATE table_genre SET genre_name = :updatedName WHERE id_genre = :genreId");
+
+
+function updateGenre($pdo, $genreId, $updatedName, $isPopular) {
+
+    $status = $isPopular ? 3 : 4;
+
+    $stmt = $pdo->prepare("UPDATE table_genre SET genre_name = :updatedName, p_status_fk = :status WHERE id_genre = :genreId");
     $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':status', $status, PDO::PARAM_INT);
     $stmt->bindParam(':genreId', $genreId, PDO::PARAM_INT);
-    $stmt->execute();
+
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Genre successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update genre.</div>';
+    }
 }
+
 
 function deleteGenre($pdo, $genreId) {
     $stmt = $pdo->prepare("DELETE FROM table_genre WHERE id_genre = :genreId");
     $stmt->bindParam(':genreId', $genreId, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Genre successfully Deleted</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete genre.</div>';
+    }
 }
+
+
+
+
 
 function createCategory($pdo) {
     $stmt = $pdo->prepare('INSERT INTO table_category (kategori_namn) VALUES (:category_name)');
     $stmt->bindParam(':category_name', $_POST['CategoryName'], PDO::PARAM_STR);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Category successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create Category.</div>';
+    }
 }
 
 function updateCategory($pdo, $CategoryId, $updatedName) {
     $stmt = $pdo->prepare("UPDATE table_category SET kategori_namn = :updatedName WHERE id_kategori = :CategoryId");
     $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
     $stmt->bindParam(':CategoryId', $CategoryId, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Category successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update Category.</div>';
+    }
 }
 
 function deleteCategory($pdo, $CategoryId) {
     $stmt = $pdo->prepare("DELETE FROM table_category WHERE id_kategori = :CategoryId");
     $stmt->bindParam(':CategoryId', $CategoryId, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Category successfully Deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete category.</div>';
+    }
 }
+
+
+
+
+
+
 
 function createserie($pdo) {
     $stmt = $pdo->prepare('INSERT INTO table_serie (serie_namn) VALUES (:serie_name)');
     $stmt->bindParam(':serie_name', $_POST['serieName'], PDO::PARAM_STR);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Serie successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create serie.</div>';
+    }
 }
 
 function updateserie($pdo, $serieId, $updatedName) {
     $stmt = $pdo->prepare("UPDATE table_serie SET serie_namn = :updatedName WHERE id_serie = :serieId");
     $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
     $stmt->bindParam(':serieId', $serieId, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Serie successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create serie.</div>';
+    }
 }
 
 function deleteserie($pdo, $serieId) {
     $stmt = $pdo->prepare("DELETE FROM table_serie WHERE id_serie = :serieId");
     $stmt->bindParam(':serieId', $serieId, PDO::PARAM_INT);
-    $stmt->execute();
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Serie successfully deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete serie.</div>';
+    }
 }
+
+
+
+
+
+
+
+function createAge($pdo, $AgeName) {
+    $stmt = $pdo->prepare('INSERT INTO table_age (age_name) VALUES (:age_name)');
+    $stmt->bindParam(':age_name', $_POST['AgeName'], PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Age successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create age.</div>';
+    }
+}
+
+function updateAge($pdo, $AgeId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_age SET Age_name = :updatedName WHERE id_age = :AgeId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':AgeId', $AgeId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Age successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update Age.</div>';
+    }
+}
+
+function deleteAge($pdo, $AgeId) {
+    $stmt = $pdo->prepare("DELETE FROM table_age WHERE id_age = :AgeId");
+    $stmt->bindParam(':AgeId', $AgeId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Age successfully Deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete Age.</div>';
+    }
+}
+
+
+
+
+
+
+
+
+
+
+function createAuthor($pdo, $authorName) {
+    $stmt = $pdo->prepare('INSERT INTO table_forfattare (forfattare_namn) VALUES (:author_name)');
+    $stmt->bindParam(':author_name', $authorName, PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Author successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create author.</div>';
+    }
+}
+
+
+function updateAuthor($pdo, $authorId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_forfattare SET forfattare_namn = :updatedName WHERE id_forfattare = :authorId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':authorId', $authorId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">author successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update author.</div>';
+    }
+}
+
+function deleteAuthor($pdo, $authorId) {
+    $stmt = $pdo->prepare("DELETE FROM table_forfattare WHERE id_forfattare = :authorId");
+    $stmt->bindParam(':authorId', $authorId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Author successfully Deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete Author.</div>';
+    }
+}
+
+
+
+
+
+function createDesigner($pdo, $DesignerName) {
+    $stmt = $pdo->prepare('INSERT INTO table_designer (designer_name) VALUES (:Designer_name)');
+    $stmt->bindParam(':Designer_name', $DesignerName, PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Designer successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create Designer.</div>';
+    }
+}
+
+
+function updateDesigner($pdo, $designerId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_designer SET designer_name = :updatedName WHERE id_designer = :DesignerId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':DesignerId', $designerId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Designer successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update Designer.</div>';
+    }
+}
+
+function deleteDesigner($pdo, $designerId) {
+    $stmt = $pdo->prepare("DELETE FROM table_designer WHERE id_designer = :DesignerId");
+    $stmt->bindParam(':DesignerId', $designerId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Designer successfully deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete designer.</div>';
+    }
+}
+
+
+
+function createlan($pdo, $lanName) {
+    $stmt = $pdo->prepare('INSERT INTO table_spark (sprak_namn) VALUES (:lan_name)');
+    $stmt->bindParam(':lan_name', $lanName, PDO::PARAM_STR);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Languague successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create Language.</div>';
+    }
+}
+
+
+function updatelan($pdo, $lanId, $updatedName) {
+    $stmt = $pdo->prepare("UPDATE table_spark SET sprak_namn = :updatedName WHERE id_sprak= :lanId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR);
+    $stmt->bindParam(':lanId', $lanId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">Language successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update language.</div>';
+    }
+}
+
+function deletelan($pdo, $lanId) {
+    $stmt = $pdo->prepare("DELETE FROM table_spark WHERE id_sprak= :lanId");
+    $stmt->bindParam(':lanId', $lanId, PDO::PARAM_INT);
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">language successfully deleted!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to delete language.</div>';
+    }
+}
+
+function getPopularGenres($pdo) {
+    $stmt = $pdo->prepare("
+        SELECT genre_name, id_genre
+        FROM table_genre
+        WHERE p_status_fk = 3
+        LIMIT 6
+    ");
+    $stmt->execute();
+    return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+}
+
 
 
 
@@ -364,63 +600,87 @@ function getStatusInformation($pdo) {
 }
 
 function getDesignerInformation($pdo) {
-    $stmt_getFormdata = $pdo->prepare('
-        SELECT * 
-        FROM table_form');
-    $stmt_getFormdata->execute();
-    
-
-    return $stmt_getFormdata->fetchAll(PDO::FETCH_ASSOC);
+ 
+        $stmt_getdesignersdata = $pdo->prepare('SELECT id_designer, designer_name FROM table_designer');
+        
+        $stmt_getdesignersdata->execute();
+        $designers = $stmt_getdesignersdata->fetchAll(PDO::FETCH_ASSOC);
+        return $designers;
 }
+
 
 function insertNewBook($pdo) {
     $bookimg = basename($_FILES['book_img']['name']);
 
     // Insert the book details into table_bocker
-    $stmt_insertNewBook = $pdo->prepare('INSERT INTO table_bocker (titel, beskrivning, age_fk, utgiven, sidor, pris, serie_fk, form_eller_illu_fk, kategori_fk, sprak_fk, status_fk, skapad_av_fk, bok_img, stock_fk) 
-        VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :form_eller_illu_fk, :kategori_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img, :stock_fk)');
+    $stmt_insertNewBook = $pdo->prepare('
+        INSERT INTO table_bocker (titel, beskrivning, age_fk, utgiven, sidor, pris, serie_fk, kategori_fk, sprak_fk, status_fk, skapad_av_fk, bok_img, stock_fk) 
+        VALUES (:titel, :beskrivning, :aldersrekommendation, :utgiven, :sidor, :pris, :serie_fk, :kategori_fk, :sprak_fk, :status_fk, :skapad_av_fk, :bok_img, :stock_fk)
+    ');
 
     $stmt_insertNewBook->bindParam(":titel", $_POST['title'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":beskrivning", $_POST['description'], PDO::PARAM_STR);
-    $stmt_insertNewBook->bindParam(":aldersrekommendation", $_POST['id_age'], PDO::PARAM_STR);
+    $stmt_insertNewBook->bindParam(":aldersrekommendation", $_POST['id_age'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":utgiven", $_POST['date'], PDO::PARAM_STR);
-    $stmt_insertNewBook->bindParam(":sidor", $_POST['pages'], PDO::PARAM_STR);
+    $stmt_insertNewBook->bindParam(":sidor", $_POST['pages'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":pris", $_POST['price'], PDO::PARAM_STR);
     $stmt_insertNewBook->bindParam(":serie_fk", $_POST['id_Serie'], PDO::PARAM_INT);
-    $stmt_insertNewBook->bindParam(":form_eller_illu_fk", $_POST['id_Designer'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":kategori_fk", $_POST['id_kategori'], PDO::PARAM_INT);
-    $stmt_insertNewBook->bindParam(":sprak_fk", $_POST['id_Language'], PDO::PARAM_INT); 
+    $stmt_insertNewBook->bindParam(":sprak_fk", $_POST['id_Language'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":status_fk", $_POST['id_status'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":stock_fk", $_POST['id_stock'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":skapad_av_fk", $_SESSION['user_id'], PDO::PARAM_INT);
     $stmt_insertNewBook->bindParam(":bok_img", $bookimg, PDO::PARAM_STR);
 
     $stmt_insertNewBook->execute();
-
     $book_id = $pdo->lastInsertId();
 
-    if (isset($_POST['id_genre']) && is_array($_POST['id_genre'])) {
-        $stmt_insertGenres = $pdo->prepare('INSERT INTO book_genre (book_id, genre_id) VALUES (:book_id, :genre_id)');
-
-        foreach ($_POST['id_genre'] as $genre_id) {
-            $stmt_insertGenres->bindParam(':book_id', $book_id, PDO::PARAM_INT);
-            $stmt_insertGenres->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
-            $stmt_insertGenres->execute();
-        }
-    }
-
+    // Insert authors into book_author many-to-many table
     if (isset($_POST['id_author']) && is_array($_POST['id_author'])) {
-        $stmt_insertAuthor = $pdo->prepare('INSERT INTO book_author (id_book, id_author) VALUES (:book_id, :author_id)');
-    
+        $stmt_insertAuthor = $pdo->prepare('
+            INSERT IGNORE INTO book_author (id_book, id_author)
+            VALUES (:book_id, :author_id)
+        ');
+
         foreach ($_POST['id_author'] as $author_id) {
             $stmt_insertAuthor->bindParam(':book_id', $book_id, PDO::PARAM_INT);
             $stmt_insertAuthor->bindParam(':author_id', $author_id, PDO::PARAM_INT);
             $stmt_insertAuthor->execute();
         }
     }
-    
 
+    // Insert genres into book_genre many-to-many table
+    if (isset($_POST['id_genre']) && is_array($_POST['id_genre'])) {
+        $stmt_insertGenre = $pdo->prepare('
+            INSERT IGNORE INTO book_genre (book_id, genre_id)
+            VALUES (:book_id, :genre_id)
+        ');
+
+        foreach ($_POST['id_genre'] as $genre_id) {
+            $stmt_insertGenre->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+            $stmt_insertGenre->bindParam(':genre_id', $genre_id, PDO::PARAM_INT);
+            $stmt_insertGenre->execute();
+        }
+    }
+
+    // Insert designers into book_designer many-to-many table
+    if (isset($_POST['id_designer']) && is_array($_POST['id_designer'])) {
+        $stmt_insertDesigner = $pdo->prepare('
+            INSERT IGNORE INTO book_designer (id_book, id_designer)
+            VALUES (:book_id, :designer_id)
+        ');
+
+        foreach ($_POST['id_designer'] as $designer_id) {
+            $stmt_insertDesigner->bindParam(':book_id', $book_id, PDO::PARAM_INT);
+            $stmt_insertDesigner->bindParam(':designer_id', $designer_id, PDO::PARAM_INT);
+            $stmt_insertDesigner->execute();
+        }
+    }
+
+    return $book_id;
 }
+
+
 
 
 function getBook($pdo) {
@@ -483,25 +743,47 @@ return $stmt_getBookdata->fetchAll(PDO::FETCH_ASSOC);
 
 function getRareBook($pdo) {
     $query = $pdo->prepare('
-        SELECT *
-        FROM table_bocker
-        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
-        WHERE table_bocker.status_fk = 1
+        SELECT 
+            table_bocker.*, 
+            GROUP_CONCAT(table_forfattare.forfattare_namn SEPARATOR ", ") AS authors
+        FROM 
+            table_bocker
+        INNER JOIN 
+            book_author ON table_bocker.id_bok = book_author.id_book
+        INNER JOIN 
+            table_forfattare ON book_author.id_author = table_forfattare.id_forfattare
+        WHERE 
+            table_bocker.status_fk = 1
+        GROUP BY 
+            table_bocker.id_bok
     ');
     $query->execute();
     return $query->fetchAll(PDO::FETCH_ASSOC);
 }
 
+
 function getPopularBook($pdo) {
-    $query = $pdo->prepare('
-        SELECT *
-        FROM table_bocker
-        INNER JOIN table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
-        WHERE table_bocker.status_fk = 2
-    ');
-    $query->execute();
-    return $query->fetchAll(PDO::FETCH_ASSOC);
-}
+  
+        $query = $pdo->prepare('
+            SELECT 
+                table_bocker.*, 
+                GROUP_CONCAT(table_forfattare.forfattare_namn SEPARATOR ", ") AS authors
+            FROM 
+                table_bocker
+            INNER JOIN 
+                book_author ON table_bocker.id_bok = book_author.id_book
+            INNER JOIN 
+                table_forfattare ON book_author.id_author = table_forfattare.id_forfattare
+            WHERE 
+                table_bocker.status_fk = 3
+            GROUP BY 
+                table_bocker.id_bok
+        ');
+        $query->execute();
+        return $query->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+
 
 
 

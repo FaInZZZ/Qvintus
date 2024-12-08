@@ -4,31 +4,8 @@ include_once 'includes/header.php';
 
 $getRareBooks = getRareBook($pdo); 
 $getPopularBooks = getPopularBook($pdo); 
+$getPopularGenres = getPopularGenres($pdo); 
 $histories = getLatestHistories($pdo);
-
-$cards = [
-    [
-        'title' => 'Card Title 1',
-        'text' => 'This is a short description for card 1.',
-        'image' => 'https://via.placeholder.com/150/ff7f7f',
-    ],
-    [
-        'title' => 'Card Title 2',
-        'text' => 'This is a short description for card 2.',
-        'image' => 'https://via.placeholder.com/150/7fffd4', 
-    ],
-    [
-        'title' => 'Card Title 3',
-        'text' => 'This is a short description for card 3.',
-        'image' => 'https://via.placeholder.com/150/6495ed', 
-    ],
-    [
-        'title' => 'Card Title 4',
-        'text' => 'This is a short description for card 4.',
-        'image' => 'https://via.placeholder.com/150/ffa500', 
-    ]
-];
-
 ?>
 <!doctype html>
 <html lang="en">
@@ -38,15 +15,22 @@ $cards = [
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Document</title>
-  
 </head>
 <body>
 
-<div class="container mt-4">
+<div class="container mt-5" style="margin-bottom: 50px;">
+    <div class="mb-3">
+        <input type="text" id="search-box" class="form-control" placeholder="Search for books, authors, genres, etc.">
+    </div>
+    <div id="search-results" class="list-group"></div>
+</div>
+
+<div class="container mt-4 rarebooks" style="margin-bottom: 200px;">
     <div class="text-center">
         <h2>Rare and Valuable</h2>
     </div>
-    <div class="book-list-container" id="bookCarousel">
+    
+    <div class="book-list-container" id="rareBooksCarousel">
         <?php foreach ($getRareBooks as $book): ?>
         <div class="book-card me-3">
             <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
@@ -64,22 +48,45 @@ $cards = [
 </div>
 
 
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <?php foreach ($cards as $card): ?>
-        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-3">
-            <div class="card h-100">
-                <img src="<?php echo htmlspecialchars($card['image']); ?>" class="card-img-top" alt="Card Image">
-                <div class="card-body">
-                    <h5 class="card-title"><?php echo htmlspecialchars($card['title']); ?></h5>
-                    <p class="card-text"><?php echo htmlspecialchars($card['text']); ?></p>
-                    <a href="#" class="btn btn-primary">View More</a>
+<<div class="container mt-5 populargenres" style=" margin-bottom: 200px;">
+    <div class="text-center">
+        <h2>Popular Genres</h2>
+    </div>
+    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-4">
+        <?php foreach ($getPopularGenres as $genre): ?>
+        <div class="col">
+            <div class="card shadow-sm border-0 h-100">
+                <div class="card-body text-center">
+                    <h5 class="card-title"><?php echo htmlspecialchars($genre['genre_name']); ?></h5>
+                    <a href="genre-books.php?genreID=<?php echo $genre['id_genre']; ?>" class="btn btn-primary btn-sm">Explore Genre</a>
                 </div>
             </div>
         </div>
         <?php endforeach; ?>
     </div>
 </div>
+
+<div class="container mt-4 popularbooks">
+    <div class="text-center">
+        <h2>Popular</h2>
+    </div>
+    <div class="book-list-container" id="popularBooksCarousel">
+        <?php foreach ($getPopularBooks as $book): ?>
+        <div class="book-card me-3">
+            <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title"><?php echo htmlspecialchars($book['titel']); ?></h5>
+                <p class="card-text"><?php echo htmlspecialchars($book['beskrivning']); ?></p>
+                <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" class="btn custom-btn">View</a>
+            </div>
+        </div>
+        <?php endforeach; ?>
+    </div>
+    <div class="see-more-container d-flex justify-content-end mt-5">
+        <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV">See more</a>
+    </div>
+</div>
+
 
 
 <section class="container py-5 text-center custom-section-height mb-5 mt-5">
@@ -124,13 +131,8 @@ In eget arcu viverra, ultrices felis vitae, tincidunt diam.  Cras dignissim diam
                 </div>
             <?php endforeach; ?>
         </div>
-    </div>
-
-
-
-
-
-
+            </div>
+            
 
 <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>

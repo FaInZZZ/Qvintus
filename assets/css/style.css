@@ -1,3 +1,6 @@
+#searchResults .card {
+    margin-bottom: 20px;
+}
 
 
 .book-list-container {
@@ -58,3 +61,4 @@
 .text-color-cus {
 	color:#594b24 !important;
 }
+

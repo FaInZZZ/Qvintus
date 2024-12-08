@@ -9,29 +9,33 @@ if (isset($_GET['search'])) {
             table_bocker.id_bok,
             table_bocker.titel,
             table_bocker.bok_img,
-            table_forfattare.forfattare_namn AS forfattare,
+            GROUP_CONCAT(DISTINCT table_forfattare.forfattare_namn SEPARATOR ', ') AS forfattare,
+            GROUP_CONCAT(DISTINCT table_genre.genre_name SEPARATOR ', ') AS genre,
             table_category.kategori_namn AS kategori,
-            table_genre.genre_namn AS genre,
             table_serie.serie_namn AS serie
         FROM 
             table_bocker
-        INNER JOIN 
-            table_forfattare ON table_bocker.forfattare_fk = table_forfattare.id_forfattare
-        INNER JOIN 
+        LEFT JOIN 
+            book_author ON table_bocker.id_bok = book_author.id_book
+        LEFT JOIN 
+            table_forfattare ON book_author.id_author = table_forfattare.id_forfattare
+        LEFT JOIN 
+            book_genre ON table_bocker.id_bok = book_genre.book_id
+        LEFT JOIN 
+            table_genre ON book_genre.genre_id = table_genre.id_genre
+        LEFT JOIN 
             table_category ON table_bocker.kategori_fk = table_category.id_kategori
-        INNER JOIN 
-            table_genre ON table_bocker.genre_fk = table_genre.id_genre
-        INNER JOIN 
+        LEFT JOIN 
             table_serie ON table_bocker.serie_fk = table_serie.id_serie
         WHERE 
             table_bocker.titel LIKE ? OR 
             table_forfattare.forfattare_namn LIKE ? OR 
             table_category.kategori_namn LIKE ? OR 
-            table_genre.genre_namn LIKE ? OR 
+            table_genre.genre_name LIKE ? OR 
             table_serie.serie_namn LIKE ?
+        GROUP BY 
+            table_bocker.id_bok
     ");
-
-
     $stmt->execute([$search, $search, $search, $search, $search]);
     $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
@@ -40,72 +44,62 @@ if (isset($_GET['search'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Search Results</title>
 </head>
 <body>
 <div class="container mt-5">
+    <div class="text-center">
+        <h2>Search Results</h2>
+    </div>
+    <div class="container mt-5">
     <div class="row">
         <?php if (isset($results) && $results): ?>
             <?php foreach ($results as $row): ?>
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <img src="<?php echo 'img/' . htmlspecialchars($row['bok_img']); ?>" class="card-img-top" alt="Book Image">
+                <div class="col-md-4 col-sm-6 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <img src="<?php echo 'img/' . htmlspecialchars($row['bok_img']); ?>" 
+                             class="card-img-top" 
+                             alt="Book Image" 
+                             style="height: 300px; object-fit: cover;">
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($row['titel']); ?></h5>
-                            <p class="card-text"><strong>Författare:</strong> <?php echo htmlspecialchars($row['forfattare']); ?></p>
-                            <p class="card-text"><strong>Kategori:</strong> <?php echo htmlspecialchars($row['kategori']); ?></p>
-                            <p class="card-text"><strong>Genre:</strong> <?php echo htmlspecialchars($row['genre']); ?></p>
-                            <p class="card-text"><strong>Serie:</strong> <?php echo htmlspecialchars($row['serie']); ?></p>
-                            <?php echo "<a href='single-book.php?BookID=" . $row['id_bok'] . "' class='btn btn-primary'>View</a>"; ?>
-                            <?php echo "<a href='editbook.php?BookID=" . $row['id_bok'] . "' class='btn btn-warning'>Edit</a>"; ?>
-                            <?php echo "<a href='deletebook.php?BookID=" . $row['id_bok'] . "' class='btn btn-danger'>Delete</a>"; ?>
+                            <h5 class="card-title text-truncate"><?php echo htmlspecialchars($row['titel']); ?></h5>
+                            <p class="card-text">
+                                <strong>Författare:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['forfattare']); ?></span>
+                            </p>
+                            <p class="card-text">
+                                <strong>Kategori:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['kategori']); ?></span>
+                            </p>
+                            <p class="card-text">
+                                <strong>Genre:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['genre']); ?></span>
+                            </p>
+                            <p class="card-text">
+                                <strong>Serie:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['serie']); ?></span>
+                            </p>
+                        </div>
+                        <div class="card-footer d-flex justify-content-between">
+                            <a href="single-book.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="editbook.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-warning btn-sm">Edit</a>
+                            <a href="deletebook.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-danger btn-sm">Delete</a>
                         </div>
                     </div>
                 </div>
             <?php endforeach; ?>
         <?php else: ?>
             <div class="col-12">
-                <div class="alert alert-warning" role="alert">
+                <div class="alert alert-warning text-center" role="alert">
                     No results found.
                 </div>
             </div>
         <?php endif; ?>
     </div>
 </div>
-
-
-
-<?php
-include_once 'config.php';
-
-if (isset($_GET['query'])) {
-    $query = "%" . $_GET['query'] . "%";
-
-    $stmt = $pdo->prepare("SELECT id_genre, genre_namn FROM table_genre WHERE genre_namn LIKE ?");
-    $stmt->execute([$query]);
-    $results = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-    if ($results) {
-        foreach ($results as $row) {
-            echo "
-            <tr>
-                <td>" . htmlspecialchars($row['id_genre']) . "</td>
-                <td>" . htmlspecialchars($row['genre_namn']) . "</td>
-                <td>
-                    <button class='btn btn-warning btn-sm edit-btn' data-id='" . $row['id_genre'] . "' data-name='" . htmlspecialchars($row['genre_namn']) . "'>Edit</button>
-                    <button class='btn btn-danger btn-sm delete-btn' data-id='" . $row['id_genre'] . "'>Delete</button>
-                </td>
-            </tr>";
-        }
-    } else {
-        echo "<tr><td colspan='3'>No results found</td></tr>";
-    }
-}
-?>
 
 </body>
 </html>
