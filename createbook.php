@@ -12,6 +12,7 @@ $getStatusInformation = getStatusInformation($pdo);
 $getDesignerInformation = getDesignerInformation($pdo); 
 $getStockInformation = getStockInformation($pdo);
 $getAgeInformation = getAgeInformation($pdo);
+$getPublisherInformation = getPublisherInformation($pdo);
 
 if (isset($_POST['submitnb'])) {
     $submitNewBook = insertNewBook($pdo);
@@ -109,6 +110,19 @@ if (isset($_POST['submitnb'])) {
         <?php endforeach; ?>
     </select>
 </div>
+
+<div class="mb-3">
+    <label for="publisherSelect" class="form-label">Select Publisher</label>
+    <select id="publisherSelect" name="id_publisher" class="form-select w-100">
+        <option value="">Choose Publisher</option>
+        <?php foreach ($getPublisherInformation as $row): ?>
+            <option value="<?php echo $row['id_pub']; ?>">
+                <?php echo $row['pub_name']; ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+</div>
+
 
         <div class="mb-3">
             <label for="SerieSelect" class="form-label">Select Serie</label>

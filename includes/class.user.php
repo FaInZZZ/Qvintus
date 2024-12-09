@@ -148,32 +148,7 @@ class User {
 			}
 	}
 	
-	public function editUserInfo($umail, $opass, $upass, $uid, $role, $status){
-		//Hämta ut nuvarande användares lösenord
-		$stmt_getUserPassword = $this->pdo->prepare('SELECT u_password FROM table_users WHERE u_id = :uid');
-		$stmt_getUserPassword->bindParam(":uid", $uid, PDO::PARAM_INT);
-		$stmt_getUserPassword->execute();
-		$oldPassword = $stmt_getUserPassword->fetch();
-		
-		if(isset($_POST['update-submit'])){
-		//Kolla om lösenordet som matats in stämmer 
-			if(!password_verify($opass, $oldPassword['u_password'])){
-				return "The password is invalid";
-			}
-		}
-			$hashedPassword = password_hash($upass, PASSWORD_DEFAULT);
-		//Uppdatera i databasen
-			$stmt_updateUserInfo = $this->pdo->prepare('UPDATE table_users SET u_email=:umail, u_password=:upass, u_role_fk = :role, u_status = :status WHERE u_id = :uid');
-			$stmt_updateUserInfo->bindParam(":umail", $umail, PDO::PARAM_STR);
-			$stmt_updateUserInfo->bindParam(":upass", $hashedPassword, PDO::PARAM_STR);
-			$stmt_updateUserInfo->bindParam(":uid", $uid, PDO::PARAM_INT);
-			$stmt_updateUserInfo->bindParam(":role", $role, PDO::PARAM_INT);
-			$stmt_updateUserInfo->bindParam(":status", $status, PDO::PARAM_INT);
-			
-			if($stmt_updateUserInfo->execute() && $uid == $_SESSION['user_id']){
-				$_SESSION['user_mail'] = $umail;
-			}
-	}
+	
 	
 	public function searchUsers($input){
 		$inputJoker = "%{$input}%";
