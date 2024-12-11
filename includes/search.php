@@ -7,32 +7,32 @@ if (isset($_GET['search'])) {
     $stmt = $pdo->prepare("
         SELECT 
             table_bocker.id_bok,
-            table_bocker.titel,
+            table_bocker.title,
             table_bocker.bok_img,
-            GROUP_CONCAT(DISTINCT table_forfattare.forfattare_namn SEPARATOR ', ') AS forfattare,
+            GROUP_CONCAT(DISTINCT table_author.author_name SEPARATOR ', ') AS author,
             GROUP_CONCAT(DISTINCT table_genre.genre_name SEPARATOR ', ') AS genre,
-            table_category.kategori_namn AS kategori,
-            table_serie.serie_namn AS serie
+            table_category.category_name AS category,
+            table_serie.serie_name AS serie
         FROM 
             table_bocker
         LEFT JOIN 
             book_author ON table_bocker.id_bok = book_author.id_book
         LEFT JOIN 
-            table_forfattare ON book_author.id_author = table_forfattare.id_forfattare
+            table_author ON book_author.id_author = table_author.id_author
         LEFT JOIN 
             book_genre ON table_bocker.id_bok = book_genre.book_id
         LEFT JOIN 
             table_genre ON book_genre.genre_id = table_genre.id_genre
         LEFT JOIN 
-            table_category ON table_bocker.kategori_fk = table_category.id_kategori
+            table_category ON table_bocker.category_fk = table_category.id_category
         LEFT JOIN 
             table_serie ON table_bocker.serie_fk = table_serie.id_serie
         WHERE 
-            table_bocker.titel LIKE ? OR 
-            table_forfattare.forfattare_namn LIKE ? OR 
-            table_category.kategori_namn LIKE ? OR 
+            table_bocker.title LIKE ? OR 
+            table_author.author_name LIKE ? OR 
+            table_category.category_name LIKE ? OR 
             table_genre.genre_name LIKE ? OR 
-            table_serie.serie_namn LIKE ?
+            table_serie.serie_name LIKE ?
         GROUP BY 
             table_bocker.id_bok
     ");
@@ -65,14 +65,14 @@ if (isset($_GET['search'])) {
                              alt="Book Image" 
                              style="height: 300px; object-fit: cover;">
                         <div class="card-body">
-                            <h5 class="card-title text-truncate"><?php echo htmlspecialchars($row['titel']); ?></h5>
+                            <h5 class="card-title text-truncate"><?php echo htmlspecialchars($row['title']); ?></h5>
                             <p class="card-text">
-                                <strong>Författare:</strong> 
-                                <span class="text-muted"><?php echo htmlspecialchars($row['forfattare']); ?></span>
+                                <strong>Author:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['author']); ?></span>
                             </p>
                             <p class="card-text">
-                                <strong>Kategori:</strong> 
-                                <span class="text-muted"><?php echo htmlspecialchars($row['kategori']); ?></span>
+                                <strong>Category:</strong> 
+                                <span class="text-muted"><?php echo htmlspecialchars($row['category']); ?></span>
                             </p>
                             <p class="card-text">
                                 <strong>Genre:</strong> 

@@ -1,6 +1,7 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+
 $user->checkLoginStatus();
 
 $getCategoryInformation = getCategoryInformation($pdo);
@@ -44,7 +45,7 @@ if (isset($_POST['submitnb'])) {
     
     <form action="" method="post" enctype="multipart/form-data">
         <div class="mb-3">
-            <label for="title" class="form-label">Titel:</label>
+            <label for="title" class="form-label">title:</label>
             <input type="text" class="form-control" id="title" name="title" required>
         </div>
 
@@ -54,12 +55,12 @@ if (isset($_POST['submitnb'])) {
         </div>
 
         <div class="mb-3">
-            <label for="pages" class="form-label">Antal sidor:</label>
+            <label for="pages" class="form-label">pages:</label>
             <input type="number" class="form-control" id="pages" name="pages" required>
         </div>
 
         <div class="mb-3">
-            <label for="price" class="form-label">Pris:</label>
+            <label for="price" class="form-label">price:</label>
             <input type="number" class="form-control" id="price" name="price" required>
         </div>
 
@@ -77,11 +78,11 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="categorySelect" class="form-label">Select Category</label>
-            <select id="categorySelect" name="id_kategori" class="form-select w-100">
+            <select id="categorySelect" name="id_category" class="form-select w-100">
                 <option value="">Choose a Category</option>
                 <?php foreach ($getCategoryInformation as $row): ?>
-                    <option value="<?php echo $row['id_kategori']; ?>">
-                        <?php echo $row['kategori_namn']; ?>
+                    <option value="<?php echo $row['id_category']; ?>">
+                        <?php echo $row['category_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -93,8 +94,8 @@ if (isset($_POST['submitnb'])) {
     <label for="authorSelect" class="form-label">Select Author(s)</label>
     <select id="authorSelect" name="id_author[]" class="form-select w-100" multiple>
         <?php foreach ($getAuthorInformation as $row): ?>
-            <option value="<?php echo $row['id_forfattare']; ?>">
-                <?php echo $row['forfattare_namn']; ?>
+            <option value="<?php echo $row['id_author']; ?>">
+                <?php echo $row['author_name']; ?>
             </option>
         <?php endforeach; ?>
     </select>
@@ -130,7 +131,7 @@ if (isset($_POST['submitnb'])) {
                 <option value="">Choose a Serie</option>
                 <?php foreach ($getSerieInformation as $row): ?>
                     <option value="<?php echo $row['id_serie']; ?>">
-                        <?php echo $row['serie_namn']; ?>
+                        <?php echo $row['serie_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
@@ -141,8 +142,8 @@ if (isset($_POST['submitnb'])) {
             <select id="LanguageSelect" name="id_Language" class="form-select w-100">
                 <option value="">Choose a Language</option>
                 <?php foreach ($getLanguageInformation as $row): ?>
-                    <option value="<?php echo $row['id_sprak']; ?>">
-                        <?php echo $row['sprak_namn']; ?>
+                    <option value="<?php echo $row['id_lan']; ?>">
+                        <?php echo $row['lan_name']; ?>
                     </option>
                 <?php endforeach; ?>
             </select>
