@@ -1,8 +1,31 @@
+
 .hero-section {
-	background-image: url('../images/pizza_header_4k.webp');
-	background-size: cover;
-	background-repeat: no-repeat;
-	color: whitesmoke;
-	min-height: 500px;
+    min-height: 500px;
+    background-color: #f5f5f5; 
 }
 
+
+.custom-bg {
+    background-color: #8a7336; 
+    color: white; 
+}
+
+
+.navbar {
+    margin: 0;
+    padding: 0;
+    position: relative; 
+    z-index: 10; 
+}
+
+
+header {
+    position: sticky;
+    top: 0;
+    z-index: 1050; 
+}
+
+
+.hero-section {
+    padding-top: 50px;
+}

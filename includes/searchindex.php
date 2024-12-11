@@ -47,10 +47,12 @@ if (isset($_GET['search'])) {
             <div class='list-group-item'>
                 <h5 class='mb-1'>" . htmlspecialchars($row['titel']) . "</h5>";
         
-        // Check if `bok_img` does not start with 'img/' before rendering
-        if (!str_starts_with($row['bok_img'], 'img/')) {
-            echo "<img src='" . htmlspecialchars($row['bok_img']) . "' alt='" . htmlspecialchars($row['titel']) . "' class='img-thumbnail mb-2' style='max-width: 150px;'>";
-        }
+               
+                echo "<img src='img/" . htmlspecialchars($row['bok_img']) . "' alt='" . htmlspecialchars($row['titel']) . "' class='img-thumbnail mb-2' style='max-width: 150px;'></br>";
+
+
+                
+                
 
         echo "
                 <small><strong>Author(s):</strong> " . htmlspecialchars($row['forfattare']) . "</small><br>
