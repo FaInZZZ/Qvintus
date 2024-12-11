@@ -77,7 +77,7 @@ include_once 'includes/header.php';
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
-                <a href="search-books.php   " class="card text-center">
+                <a href="book-modify.php   " class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Books</h5>
                     </div>

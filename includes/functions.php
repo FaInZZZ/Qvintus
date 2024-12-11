@@ -549,6 +549,9 @@ function getDesignerInformation($pdo) {
 
 function updateBook($pdo, $bookId)
 {
+    if ($createdBy != $_SESSION['user_id'] && checkrolelvl($_SESSION['user_id']) < 100) {
+        die("<div class='alert alert-danger' role='alert'><strong>Permission Denied:</strong> You don't have permission to edit this book.</div>");
+    }
     $bookimg = null;
 
     if (!empty($_FILES["book_img"]["tmp_name"])) {
@@ -583,22 +586,23 @@ function updateBook($pdo, $bookId)
     }
 
     $stmt_update = $pdo->prepare('
-    UPDATE table_bocker
-    SET
-        title = :title,
-        `desc` = :description,
-        pages = :pages,
-        price = :price,
-        date = :date,
-        status_fk = :id_status,
-        category_fk = :id_category,
-        age_fk = :id_age,
-        publisher_fk = :id_publisher,
-        serie_fk = :id_serie,
-        lan_fk = :id_language,
-        stock_fk = :id_stock,
-        bok_img = :book_img
-    WHERE id_bok = :id_bok
+        UPDATE table_bocker
+        SET
+            title = :title,
+            description = :description, -- Escaped
+            pages = :pages,
+            price = :price,
+            `date` = :date, -- Escaped
+            status_fk = :id_status,
+            category_fk = :id_category,
+            age_fk = :id_age,
+            publisher_fk = :id_publisher,
+            serie_fk = :id_serie,
+            lan_fk = :id_language,
+            stock_fk = :id_stock,
+            bok_img = :book_img
+        WHERE id_bok = :id_bok
+
 ');
 
 
@@ -665,7 +669,7 @@ function insertNewBook($pdo) {
 
     try {
         $stmt_insertNewBook = $pdo->prepare('
-            INSERT INTO table_bocker (title, desc, age_fk, date, pages, price, serie_fk, category_fk, lan_fk, status_fk, createdby_fk, bok_img, stock_fk, publisher_fk) 
+            INSERT INTO table_bocker (title, description, age_fk, date, pages, price, serie_fk, category_fk, lan_fk, status_fk, createdby_fk, bok_img, stock_fk, publisher_fk) 
             VALUES (:title, :desc, :aldersrekommendation, :date, :pages, :price, :serie_fk, :category_fk, :lan_fk, :status_fk, :createdby_fk, :bok_img, :stock_fk, :publisher_fk)
         ');
 

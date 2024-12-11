@@ -39,5 +39,5 @@ if(isset($_POST['user-login'])){
     </form>
 </div>	
 <?php 
-include_once 'includes/footer.php';
+
 ?>
