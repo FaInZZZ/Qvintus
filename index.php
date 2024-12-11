@@ -18,36 +18,35 @@ $histories = getLatestHistories($pdo);
     <title>Document</title>
 </head>
 <body>
+    <main>
+    <div class="container mt-5">
+            <div class="mb-3 d-flex align-items-center">
+                <input type="text" id="search-box" class="form-control me-2" placeholder="Search for books, authors, genres, etc.">
+                <button class="btn custom-btn" onclick="closesearch()">Close</button>
+            </div>
+            <div id="search-results" class="list-group"></div>
+        </div>
 
-<div class="container mt-5" style="margin-bottom: 50px;">
-    <div class="mb-3 d-flex align-items-center">
-        <input type="text" id="search-box" class="form-control me-2" placeholder="Search for books, authors, genres, etc.">
-        <button class="btn custom-btn" onclick="closesearch()">Close</button>
-    </div>
-    <div id="search-results" class="list-group"></div>
-</div>
-
-<div class="container mt-4 rarebooks" style="margin-bottom: 10px;">
-    <div class="text-center">
-        <h2>Rare and Valuable</h2>
-    </div>
-    
-    <div class="book-list-container" id="rareBooksCarousel">
-    <?php foreach ($getRareBooks as $book): ?>
-    <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" class="book-card-link" style="text-decoration: none; color: inherit;">
-        <div class="book-card me-3">
-            <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
-            <div class="card-body">
-                <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
-                <div class="text-end">
-                    <p class="card-text"><?php echo htmlspecialchars($book['price']); ?>€</p>
-                </div>
-          
+        <div class="container mt-4 rarebooks">
+            <div class="text-center">
+                <h2>Rare and Valuable</h2>
+            </div>
+            <div class="book-list-container" id="rareBooksCarousel">
+                <?php foreach ($getRareBooks as $book): ?>
+                <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" class="book-card-link" style=" text-decoration: none; color: inherit;">
+                    <div class="book-card me-3">
+                        <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
+                            <div class="text-end">
+                                <p class="card-text"><?php echo htmlspecialchars($book['price']); ?>€</p>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+                <?php endforeach; ?>
             </div>
         </div>
-    </a>
-    <?php endforeach; ?>
-</div>
 <div class="see-more-container d-flex justify-content-end mt-5">
     <a href="all-books.php?statusid=<?php echo $book['status_fk']; ?>" class="btn RnV">See more</a>
 </div>

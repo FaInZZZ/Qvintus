@@ -44,6 +44,7 @@ if (isset($_GET['search'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="../assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -84,7 +85,7 @@ if (isset($_GET['search'])) {
                             </p>
                         </div>
                         <div class="card-footer d-flex justify-content-between">
-                            <a href="single-book.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="single-book.php?BookID=<?php echo $row['id_bok']; ?>" class="btn custom-btn btn-sm">View</a>
                             <a href="editbook.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-warning btn-sm">Edit</a>
                             <a href="deletebook.php?BookID=<?php echo $row['id_bok']; ?>" class="btn btn-danger btn-sm">Delete</a>
                         </div>

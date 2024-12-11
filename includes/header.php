@@ -35,7 +35,7 @@ $adminMenuLinks = array(
 );
 $LoginMenuLinks = array(
   array(
-      "title" => "dashboard",
+      "title" => "Dashboard",
       "url" => "book-dashboard.php"
   )
 );

@@ -1,4 +1,4 @@
-<footer class="custom-bg text-white pt-5">
+<footer class="custom-bg text-white pt-5 w-100">
     <div class="container">
         <div class="row">
             <div class="col-lg-4 col-md-6 mb-4">
@@ -32,51 +32,51 @@
             <p class="mb-0">&copy; 2024 Qvintus. All Rights Reserved.</p>
         </div>
     </div>
-    
+
     <style>
+        .custom-bg {
+            background-color: #8a7336 !important;
+        }
 
-.custom-bg {
-    background-color: #8a7336 !important;  
-}
+        footer {
+            background-color: #343a40;
+            color: #ffffff;
+            position: relative;
+            width: 100%; 
+        }
 
-      footer {
-    background-color: #343a40; 
-    color: #ffffff;
-}
+        footer h5 {
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #f8d64e;
+        }
 
-footer h5 {
-    font-weight: bold;
-    margin-bottom: 15px;
-    color: #f8d64e; 
-}
+        footer a {
+            color: #f8d64e;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
 
-footer a {
-    color: #f8d64e; 
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
+        footer a:hover {
+            color: #ffffff;
+        }
 
-footer a:hover {
-    color: #ffffff; 
-}
+        footer ul {
+            padding: 0;
+            list-style: none;
+        }
 
-footer ul {
-    padding: 0;
-    list-style: none;
-}
+        footer ul li {
+            margin-bottom: 10px;
+        }
 
-footer ul li {
-    margin-bottom: 10px;
-}
+        footer ul li i {
+            margin-right: 10px;
+        }
 
-footer ul li i {
-    margin-right: 10px; 
-}
-
-footer .text-center p {
-    margin: 0;
-    color: #bbbbbb; 
-}
-
+        footer .text-center p {
+            margin: 0;
+            color: #bbbbbb;
+        }
     </style>
 </footer>

@@ -42,7 +42,7 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '                <h3 class="card-title">' . htmlspecialchars($book['title']) . '</h3>'; 
         echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['authors']) . '</p>'; 
         echo '                <p class="card-text fs-6"><small class="text-muted">Published: ' . htmlspecialchars($book['date']) . '</small></p>';
-        echo '                <p class="card-text">' . htmlspecialchars($book['desc']) . '</p>'; 
+        echo '                <p class="card-text">' . htmlspecialchars($book['description']) . '</p>'; 
         echo '            </div>';
         echo '            <a href="single-book.php?BookID=' . htmlspecialchars($book['id_bok']) . '" class="btn custom-btn" style="width: 100px;">View</a>';  
         echo '        </div>';
@@ -62,7 +62,7 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '                <h3 class="card-title">' . htmlspecialchars($book['title']) . '</h3>'; 
         echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['authors']) . '</p>'; 
         echo '                <p class="card-text fs-6"><small class="text-muted">Published: ' . htmlspecialchars($book['date']) . '</small></p>';
-        echo '                <p class="card-text">' . htmlspecialchars($book['desc']) . '</p>'; 
+        echo '                <p class="card-text">' . htmlspecialchars($book['description']) . '</p>'; 
         echo '            </div>';
         echo '            <a href="single-book.php?BookID=' . htmlspecialchars($book['id_bok']) . '" class="btn custom-btn" style="width: 100px;">View</a>';  
         echo '        </div>';
@@ -82,7 +82,7 @@ if ($bookid == 1 && isset($getRareBooks)) {
         echo '                <h3 class="card-title">' . htmlspecialchars($book['title']) . '</h3>'; 
         echo '                <p class="card-text fs-5">By ' . htmlspecialchars($book['authors']) . '</p>'; 
         echo '                <p class="card-text fs-6"><small class="text-muted">Published: ' . htmlspecialchars($book['date']) . '</small></p>';
-        echo '                <p class="card-text">' . htmlspecialchars($book['desc']) . '</p>'; 
+        echo '                <p class="card-text">' . htmlspecialchars($book['description']) . '</p>'; 
         echo '            </div>';
         echo '            <a href="single-book.php?BookID=' . htmlspecialchars($book['id_bok']) . '" class="btn custom-btn" style="width: 100px;">View</a>';  
         echo '        </div>';

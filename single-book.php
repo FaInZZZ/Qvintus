@@ -53,7 +53,7 @@ if (!$getSingleBookInformation) {
             <div class="tab-content mt-3" id="bookTabsContent">
                 <div class="tab-pane fade show active" id="description" role="tabpanel" aria-labelledby="description-tab">
                     <p><strong>Description</strong></p>
-                    <p><?php echo htmlspecialchars($getSingleBookInformation['desc']); ?></p>
+                    <p><?php echo htmlspecialchars($getSingleBookInformation['description']); ?></p>
                 </div>
                 <div class="tab-pane fade" id="product-info" role="tabpanel" aria-labelledby="product-info-tab">
                     <ul>
