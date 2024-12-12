@@ -2,6 +2,8 @@
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
 include_once 'includes/upload.php';
+$user->checkLoginStatus();
+$user->checkUserRole(5);
 
 if(isset($_POST['submitHistory'])) {
     $History = insertNewHistory($pdo);
@@ -43,5 +45,6 @@ if(isset($_POST['submitHistory'])) {
 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js"></script>
+    <?php include_once 'includes/footer.php'; ?>
 </body>
 </html>

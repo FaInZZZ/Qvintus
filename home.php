@@ -13,6 +13,5 @@ $user->checkLoginStatus();
 	echo "<h2>Welcome {$_SESSION['user_name']}</h2>";
 ?>
 </div>	
-<?php 
 
-?>
+<?php include_once 'includes/footer.php'; ?>

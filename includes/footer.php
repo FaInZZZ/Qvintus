@@ -1,3 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/css/searchbooks.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    
+
 <footer class="custom-bg text-white pt-5 w-100">
     <div class="container">
         <div class="row">
@@ -11,10 +22,10 @@
             <div class="col-lg-4 col-md-6 mb-4">
                 <h5 class="text-uppercase">Quick Links</h5>
                 <ul class="list-unstyled">
-                    <li><a href="#" class="text-white text-decoration-none">Home</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Books</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Activity</a></li>
-                    <li><a href="#" class="text-white text-decoration-none">Contact Us</a></li>
+                    <li><a href="index.php" class="text-white text-decoration-none">Home</a></li>
+                    <li><a href="all-books.php" class="text-white text-decoration-none">Books</a></li>
+                    <li><a href="activity.php" class="text-white text-decoration-none">Activity</a></li>
+                    <li><a href="contact.php" class="text-white text-decoration-none">Contact Us</a></li>
                 </ul>
             </div>
 
@@ -80,3 +91,5 @@
         }
     </style>
 </footer>
+</body>
+</html>

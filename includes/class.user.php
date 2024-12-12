@@ -1,68 +1,88 @@
 <?php
 class User {
+  // Stores the username of the user. Initialized with a default value for guests.
   private $username;
+  
+  // Represents the role of the user, determining their access level.
   private $role;
+  
+  // Holds the PDO object for database interactions.
   private $pdo;
+  
+  // Stores error messages generated during user operations.
   private $errorMessages = [];
+  
+  // Tracks the error state for operations, 0 means no errors.
   private $errorState = 0;
 
-
+  // Constructor initializes the default role, username, and database connection.
+  // Parameters:
+  // - $pdo (PDO): The PDO object used for database interactions.
   function __construct($pdo) {
-	$this->role = 4;
-	$this->username = "RandomGuest123";
-	$this->pdo = $pdo;
+	$this->role = 4; // Default role is set to 4, likely representing a guest.
+	$this->username = "RandomGuest123"; // Default username for unauthenticated users.
+	$this->pdo = $pdo; // Assigns the PDO object for database use.
   }
   
+  // Cleans input data by trimming whitespace, stripping slashes, and converting special characters.
+  // Parameters:
+  // - $data (string): The input data to be cleaned.
+  // Returns:
+  // - (string): The sanitized input data.
   private function cleanInput($data){
-		$data = trim($data);
-		$data = stripslashes($data);
-		$data = htmlspecialchars($data);
+		$data = trim($data); // Removes unnecessary whitespace.
+		$data = stripslashes($data); // Removes slashes from input.
+		$data = htmlspecialchars($data); // Converts special characters to HTML entities to prevent XSS.
 		return $data;
 	}
   
+  // Validates user registration inputs including username, email, and password.
+  // Parameters:
+  // - $uname (string): The username provided by the user.
+  // - $umail (string): The user's email address.
+  // - $upass (string): The user's password.
+  // - $upassrepeat (string): Confirmation of the password.
+  // Returns:
+  // - (array|string): Array of error messages if validation fails, or 1 if validation succeeds.
   public function checkUserRegisterInput($uname, $umail, $upass, $upassrepeat){
 	  $this->errorState = 0;
-	  //START Kolla om användarens inmatade username eller email finns i databasen
 		if(isset($_POST['register-submit'])){
+		  // Checks if the username or email is already taken.
 		  $stmt_checkUsername = $this->pdo->prepare('SELECT * FROM table_users WHERE u_name = :uname OR u_email = :email');
 		  $stmt_checkUsername->bindParam(":uname", $uname, PDO::PARAM_STR);
 		  $stmt_checkUsername->bindParam(":email", $umail, PDO::PARAM_STR);
 		  $stmt_checkUsername->execute();
 		  
-		  //Kolla om queryn returnerar något resultat
 		  if($stmt_checkUsername->rowCount() > 0){
 			  array_push($this->errorMessages,"Username or email is already taken! ");
 			  $this->errorState = 1;
 		}
 	  }
 	  else{
+		  // Checks if the email is already taken.
 		  $stmt_checkUserEmail = $this->pdo->prepare('SELECT * FROM table_users WHERE u_email = :email');
-			  $stmt_checkUserEmail->bindParam(":email", $umail, PDO::PARAM_STR);
-			  $stmt_checkUserEmail->execute();
-			  
-			  //Kolla om queryn returnerar något resultat
-			  if($stmt_checkUserEmail->rowCount() > 0){
-				  array_push($this->errorMessages,"Email is already taken! ");
-				  $this->errorState = 1;
-			}
+		  $stmt_checkUserEmail->bindParam(":email", $umail, PDO::PARAM_STR);
+		  $stmt_checkUserEmail->execute();
+		  
+		  if($stmt_checkUserEmail->rowCount() > 0){
+			  array_push($this->errorMessages,"Email is already taken! ");
+			  $this->errorState = 1;
+		}
 	  }
-	  //SLUT Kolla om användarens inmatade username eller email finns i databasen
-	  
-	  //START Kolla om användarens inmatade lösenord stämmer överens ochj är tillräckligt långt
+
+	  // Validates password match and length.
 	  if($upass !== $upassrepeat){
 		  array_push($this->errorMessages,"Passwords do not match! ");
 		  $this->errorState = 1;
 	  }
-	  
 	  else{
 		  if(strlen($upass) < 8){
 			array_push($this->errorMessages,"Password is too short! ");
 			$this->errorState = 1;
 		  }
 	  }
-	  //SLUT Kolla om användarens inmatade lösenord stämmer överens
 	  
-	  //START Kolla om användarens inmatade email är en "riktig" adress
+	  // Validates email format.
 	  if (!filter_var($umail, FILTER_VALIDATE_EMAIL)) {
 			array_push($this->errorMessages,"Email not in correct format! ");
 			$this->errorState = 1;
@@ -76,17 +96,23 @@ class User {
 	 }
   }
   
+  // Handles user registration by inserting user data into the database.
+  // Parameters:
+  // - $uname (string): The username provided by the user.
+  // - $umail (string): The user's email address.
+  // - $upass (string): The user's password.
   public function register($uname, $umail, $upass){
-	  $hashedPassword = password_hash($upass, PASSWORD_DEFAULT);
-	  $uname = $this->cleanInput($uname);
+	  $hashedPassword = password_hash($upass, PASSWORD_DEFAULT); // Hashes the password for security.
+	  $uname = $this->cleanInput($uname); // Cleans the username input.
 	  
+	  // Inserts user data into the database.
 	  $stmt_registerUser = $this->pdo->prepare('INSERT INTO table_users (u_name, u_password, u_email, u_role_fk) VALUES (:name, :pw, :email, 1)');
 	  $stmt_registerUser->bindParam(":name", $uname, PDO::PARAM_STR);
 	  $stmt_registerUser->bindParam(":pw", $hashedPassword, PDO::PARAM_STR);
 	  $stmt_registerUser->bindParam(":email", $umail, PDO::PARAM_STR);
 	  
 	  if($stmt_registerUser->execute()){
-		  header("Location: login.php?newuser=1");
+		  header("Location: login.php?newuser=1"); // Redirect to login page on success.
 	  }
 	  else{
 		  array_push($this->errorMessages, "Your info was input correctly,but something went wrong when saving to database, please be in touch with support!");
@@ -94,21 +120,30 @@ class User {
 	  
   }
   
+  // Handles user login by verifying credentials and starting a session.
+  // Parameters:
+  // - $unamemail (string): The username or email provided by the user.
+  // - $upass (string): The user's password.
+  // Returns:
+  // - (array|string): Array of error messages if validation fails, or nothing if successful.
  public function login($unamemail, $upass){
 	$this->errorState = 0;
+	// Checks if the username or email exists in the database.
 	$stmt_checkUsername = $this->pdo->prepare('SELECT * FROM table_users WHERE u_name = :uname OR u_email = :email');
 	$stmt_checkUsername->bindParam(":uname", $unamemail, PDO::PARAM_STR);
 	$stmt_checkUsername->bindParam(":email", $unamemail, PDO::PARAM_STR);
 	$stmt_checkUsername->execute();
-	//Check if statement returns a result
+
 	if($stmt_checkUsername->rowCount() === 0){
 		  array_push($this->errorMessages,"Username or email does not exist! ");
 		  $this->errorState = 1;
 	}
-	//Save user data to an array
+
 	$userData = $stmt_checkUsername->fetch();
 	
+	// Verifies the password.
 	if(password_verify($upass, $userData['u_password'])){
+		// Initializes user session variables on successful login.
 		$_SESSION['user_id'] = $userData['u_id'];
 		$_SESSION['user_name'] = $userData['u_name'];
 		$_SESSION['user_mail'] = $userData['u_email'];
@@ -119,9 +154,11 @@ class User {
 		array_push($this->errorMessages,"Password is incorrect! ");
 		return $this->errorMessages;
 	}
-	
-	
  }
+
+ // Checks if the user is logged in, otherwise redirects to the login page.
+ // Returns:
+ // - (bool): True if logged in, otherwise redirects to login page.
 	public function checkLoginStatus(){
 		if(isset($_SESSION['user_id'])){
 			return true;
@@ -131,59 +168,26 @@ class User {
 		}
 	}
 	
-	public function checkUserRole($val){
-		
-		$stmt_checkUserRoleLevel = $this->pdo->prepare('SELECT * FROM table_roles WHERE r_id = :rid
-		');
-		$stmt_checkUserRoleLevel->bindParam(":rid", $_SESSION['user_role'], PDO::PARAM_INT);
-		$stmt_checkUserRoleLevel->execute();
-		$result = $stmt_checkUserRoleLevel->fetch();
-		
-		if($result['r_level'] >= $val){
-			return true;
-		}
-		
-		else{
-			return false;
-			}
-	}
-	
-	
-	
-	public function searchUsers($input){
-		$inputJoker = "%{$input}%";
-		$stmt_checkUsername = $this->pdo->prepare('SELECT * FROM table_users WHERE u_name LIKE :uname OR u_email LIKE :email');
-		$stmt_checkUsername->bindParam(":uname", $inputJoker, PDO::PARAM_STR);
-		$stmt_checkUsername->bindParam(":email", $inputJoker, PDO::PARAM_STR);
-		$stmt_checkUsername->execute();
-		$userArray = $stmt_checkUsername->fetchAll();
-		return $userArray;
-	}
-	
-	public function getUserInfo($uid){
-		$stmt_selectUserData = $this->pdo->prepare('SELECT * FROM table_users WHERE u_id = :uid');
-		$stmt_selectUserData->bindParam(":uid", $uid, PDO::PARAM_INT);
-		$stmt_selectUserData->execute();
-		$userInfo = $stmt_selectUserData->fetch();
-		return $userInfo;
-	}
-	
-	public function logout(){
-		session_unset();
-		session_destroy();
-		header("Location: login.php");
-		
-	}
-	
-	public function deleteUser($uid){
-		$stmt_deleteUser = $this->pdo->prepare('DELETE FROM table_users WHERE u_id = :uid');
-		$stmt_deleteUser->bindParam(":uid", $uid, PDO::PARAM_INT);
-		if($stmt_deleteUser->execute()){
-			return "User deleted successfully";
-		}
-		else{
-			return "Something unexpected has happened. Try again later or contact support";
-		}
-	}
+	// Checks if the user's role level meets or exceeds the specified value.
+	// Parameters:
+	// - $val (int): The minimum required role level.
+	// Returns:
+	// - (bool): True if the user's role level meets or exceeds the value, otherwise
 
+  
+  // Checks if the user's role level meets or exceeds the specified value.
+  public function checkUserRole($val){
+    $stmt_checkUserRoleLevel = $this->pdo->prepare('SELECT * FROM table_roles WHERE r_id = :rid');
+    $stmt_checkUserRoleLevel->bindParam(":rid", $_SESSION['user_role'], PDO::PARAM_INT);
+    $stmt_checkUserRoleLevel->execute();
+    $result = $stmt_checkUserRoleLevel->fetch();
+
+    if ($result['r_level'] >= $val) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
 }
+

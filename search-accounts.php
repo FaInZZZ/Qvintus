@@ -1,6 +1,9 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 ?>
 
 <!DOCTYPE html>
@@ -42,5 +45,6 @@ include_once 'includes/header.php';
             });
         });
     </script>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

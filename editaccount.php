@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/config.php';
 include_once 'includes/functions.php';
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 
 if (!isset($_SESSION['user_id'])) {
     
@@ -31,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Edit Account</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-5">
         <h1>Edit Account</h1>
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($_GET['error']); ?></div>
@@ -50,13 +52,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <input type="email" id="u_email" name="u_email" class="form-control" value="<?= htmlspecialchars($user['u_email']); ?>" required>
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-2">
                 <label for="u_password">New Password (leave blank to keep unchanged)</label>
                 <input type="password" id="u_password" name="u_password" class="form-control">
             </div>
 
-            <button type="submit" class="btn btn-primary">Update Account</button>
+            <button type="submit" class="btn custom-btn">Update Account</button>
         </form>
     </div>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

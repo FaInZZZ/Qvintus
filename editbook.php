@@ -2,6 +2,7 @@
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
 $user->checkLoginStatus();
+$user->checkUserRole(5);
 
 
 
@@ -31,6 +32,7 @@ if (isset($_POST['submitEdit'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -44,56 +46,37 @@ if (isset($_POST['submitEdit'])) {
 <div class="container mt-5">
     <h2>Edit Book</h2>
     <form action="" method="post" enctype="multipart/form-data">
-        <!-- Title -->
         <div class="mb-3">
             <label for="title" class="form-label">Title:</label>
             <input type="text" class="form-control" id="title" name="title" 
                    value="<?php echo htmlspecialchars($bookData['title'] ?? ''); ?>" required>
         </div>
 
-        <!-- Description -->
         <div class="mb-3">
             <label for="description" class="form-label">Description:</label>
             <input type="text" class="form-control" id="description" name="description" 
-                   value="<?php echo htmlspecialchars($bookData['desc'] ?? ''); ?>" required>
+                   value="<?php echo htmlspecialchars($bookData['description'] ?? ''); ?>" required>
         </div>
 
-        <!-- Pages -->
         <div class="mb-3">
             <label for="Pages" class="form-label">Pages:</label>
             <input type="number" class="form-control" id="Pages" name="Pages" 
                    value="<?php echo htmlspecialchars($bookData['pages'] ?? ''); ?>" required>
         </div>
 
-        <!-- Price -->
         <div class="mb-3">
             <label for="Price" class="form-label">Price:</label>
             <input type="number" class="form-control" id="Price" name="Price" 
                    value="<?php echo htmlspecialchars($bookData['price'] ?? ''); ?>" required>
         </div>
 
-        <!-- Date -->
         <div class="mb-3">
             <label for="date" class="form-label">Date:</label>
             <input type="date" class="form-control" id="date" name="date" 
                    value="<?php echo htmlspecialchars($bookData['date'] ?? ''); ?>" required>
         </div>
 
-        <!-- Status -->
-        <div class="mb-3">
-            <label for="StatusSelect" class="form-label">Select Status:</label>
-            <select id="StatusSelect" name="id_status" class="form-select w-100" required>
-                <option value="">Select status</option>
-                <?php foreach ($getStatusInformation as $row): ?>
-                    <option value="<?php echo htmlspecialchars($row['id_status']); ?>" 
-                            <?php echo ($row['id_status'] == $bookData['status_fk']) ? 'selected' : ''; ?>>
-                        <?php echo htmlspecialchars($row['status_namn']); ?>
-                    </option>
-                <?php endforeach; ?>
-            </select>
-        </div>
 
-        <!-- Age Group -->
         <div class="mb-3">
             <label for="ageSelect" class="form-label">Select Age Group:</label>
             <select id="ageSelect" name="id_age" class="form-select w-100" required>
@@ -107,7 +90,7 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Category -->
+
         <div class="mb-3">
             <label for="categorySelect" class="form-label">Select Category:</label>
             <select id="categorySelect" name="id_category" class="form-select w-100" required>
@@ -121,7 +104,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Author(s) -->
         <div class="mb-3">
             <label for="authorSelect" class="form-label">Select Author(s):</label>
             <select id="authorSelect" name="id_author[]" class="form-select w-100" multiple required>
@@ -134,7 +116,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Genre(s) -->
         <div class="mb-3">
             <label for="GenreSelect" class="form-label">Select Genre(s):</label>
             <select id="GenreSelect" name="id_genre[]" class="form-select w-100" multiple required>
@@ -147,7 +128,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Publisher -->
         <div class="mb-3">
             <label for="publisherSelect" class="form-label">Select Publisher:</label>
             <select id="publisherSelect" name="id_publisher" class="form-select w-100" required>
@@ -161,7 +141,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Serie -->
         <div class="mb-3">
             <label for="SerieSelect" class="form-label">Select Serie:</label>
             <select id="SerieSelect" name="id_serie" class="form-select w-100" required>
@@ -175,7 +154,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Language -->
         <div class="mb-3">
             <label for="LanguageSelect" class="form-label">Select Language:</label>
             <select id="LanguageSelect" name="id_language" class="form-select w-100" required>
@@ -189,7 +167,6 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <!-- Designer(s) -->
         <div class="mb-3">
             <label for="designerSelect" class="form-label">Select Designer(s):</label>ä
             <select id="designerSelect" name="id_designer[]" class="form-select w-100" multiple required>
@@ -216,14 +193,25 @@ if (isset($_POST['submitEdit'])) {
     </select>
 </div>
 
+    <div class="mb-3">
+            <label for="StatusSelect" class="form-label">Select Status:</label>
+            <select id="StatusSelect" name="id_status" class="form-select w-100" required>
+                <option value="">Select status</option>
+                <?php foreach ($getStatusInformation as $row): ?>
+                    <option value="<?php echo htmlspecialchars($row['id_status']); ?>" 
+                            <?php echo ($row['id_status'] == $bookData['status_fk']) ? 'selected' : ''; ?>>
+                        <?php echo htmlspecialchars($row['status_namn']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
+        </div>
 
-        <!-- Image -->
-        <div class="form-group">
+        <div class="form-group mb-4">
             <label for="img">Add image</label>
             <input type="file" class="form-control" id="book_img" name="book_img" placeholder="Upload Image">
         </div>
 
-        <button type="submit" name="submitEdit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" name="submitEdit" class="btn custom-btn btn-lg mb-1">Save Changes</button>
     </form>
 </div>
 
@@ -235,6 +223,7 @@ if (isset($_POST['submitEdit'])) {
         });
     });
 </script>
+<?php include_once 'includes/footer.php'; ?>
 </body>
 </html>
 

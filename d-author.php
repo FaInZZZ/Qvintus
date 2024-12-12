@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+$user->checkLoginStatus();
+$user->checkUserRole(5);
 
 if (isset($_POST['cauthor'])) {
     $authorName = $_POST['authorName'];
@@ -39,7 +41,7 @@ if (isset($_POST['deleteauthor'])) {
 <body>
     <div class="container mt-5">
         <div class="d-flex justify-content-around align-items-center mb-4 flex-wrap">
-            <h1 class="text-color-cus">Manage authors</h1>
+            <h1 class="">Manage authors</h1>
             <div>
                 <button type="button" class="btn custom-btn btn-lg me-3 w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create author</button>
                 <button type="button" class="btn btn-secondary btn-lg w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit author</button>
@@ -142,5 +144,6 @@ if (isset($_POST['deleteauthor'])) {
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

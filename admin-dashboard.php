@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 ?>
 
 <!DOCTYPE html>
@@ -22,7 +24,7 @@ include_once 'includes/header.php';
         <h1>Admin dashboard</h1>
         </div>
             <div class="col-lg-4 col-md-6">
-                <a href="includes/search-accounts.php" class="card text-center">
+                <a href="search-accounts.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Edit Users</h5>
                     </div>
@@ -35,7 +37,7 @@ include_once 'includes/header.php';
                     </div>
                 </a>
             </div>
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6 mb-5">
                 <a href="register.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Register user</h5>
@@ -46,7 +48,8 @@ include_once 'includes/header.php';
             
           
         </div>
+        
     </main>
-    
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

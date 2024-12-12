@@ -1,0 +1,29 @@
+
+body {
+    background-color: #f8f9fa;
+
+}
+.section-title {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #343a40;
+}
+.icon-box {
+    text-align: center;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.icon-box img {
+    height: 80px;
+    margin-bottom: 20px;
+}
+.icon-box h5 {
+    
+    margin-bottom: 15px;
+}
+.icon-box p {
+    color: #6c757d;
+}

@@ -26,3 +26,18 @@ if (isset($_GET['search'])) {
     }
 }
 ?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <!-- Link to external CSS for styling -->
+    <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Set character encoding -->
+    <meta charset="UTF-8">
+    <!-- Enable mobile responsiveness -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Set the page title -->
+    <title>Document</title>
+</head>
+<body>
+</body>
+</html>

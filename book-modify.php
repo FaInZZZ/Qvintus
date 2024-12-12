@@ -9,7 +9,7 @@ include_once 'includes/header.php';
     <link rel="stylesheet" href="assets/css/admin.css">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin-Dashboard</title>
+    <title>Manage book</title>
 </head>
 <body>
 
@@ -19,7 +19,7 @@ include_once 'includes/header.php';
 <main class="container mt-4">
         <div class="row justify-content-center">
             <div class="text-center mb-3 mt-3">
-        <h1>Admin dashboard</h1>
+        <h1>Manage book</h1>
         </div>
             <div class="col-lg-4 col-md-6">
                 <a href="createbook.php" class="card text-center">
@@ -37,6 +37,6 @@ include_once 'includes/header.php';
             </div>
         </div>
     </main>
-    
+    <?php include_once 'includes/footer.php'; ?>
 </body>
 </html>

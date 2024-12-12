@@ -14,10 +14,23 @@ if(isset($_POST['register-submit'])){
 		}
 	}
 }
+
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 ?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="stylesheet" href="assets/css/style.css">
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Register</title>
+</head>
+<body>
+	
 
-<div class="container">
+<div class="container mb-5 mt-5">
 <h1>Register form</h1>
     <form method="post">
 		<label for="uname" class="form-label">Username</label><br>
@@ -28,9 +41,13 @@ if(isset($_POST['register-submit'])){
         <input type="password" class="form-control" name="upass" id="upass"><br>
 		<label for="upassrepeat" class="form-label">Repeat password</label><br>
         <input type="password" class="form-control" name="upassrepeat" id="upassrepeat"><br>
-        <input type="submit" class="btn btn-primary py-2 px-5" name="register-submit" value="Register">
+        <input type="submit" class="btn custom-btn py-2 px-5" name="register-submit" value="Register">
     </form>
-</div>	@
+</div>	
 <?php 
 include_once 'includes/footer.php';
 ?>
+
+
+</body>
+</html>
