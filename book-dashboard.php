@@ -78,12 +78,20 @@ $user->checkUserRole(5);
                 </a>
             </div>
             <div class="col-lg-4 col-md-6">
+                <a href="d-publisher.php   " class="card text-center">
+                    <div class="card-body">
+                        <h5 class="card-title">Publisher</h5>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-4 col-md-6">
                 <a href="book-modify.php   " class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Books</h5>
                     </div>
                 </a>
             </div>
+            
             
           
         </div>

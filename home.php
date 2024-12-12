@@ -14,4 +14,4 @@ $user->checkLoginStatus();
 ?>
 </div>	
 
-<?php include_once 'includes/footer.php'; ?>
+<?php include_once 'includes/footerfixed.php'; ?>

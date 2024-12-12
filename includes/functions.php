@@ -439,6 +439,65 @@ function deleteSerie($pdo, $serieId) {
     }
 }
 
+
+
+// Function to create a new publisher
+function createpublisher($pdo) {
+    // Prepare the SQL query to insert a new publisher
+    $stmt = $pdo->prepare('INSERT INTO table_publisher (pub_name) VALUES (:publisher_name)');
+    $stmt->bindParam(':publisher_name', $_POST['publisherName'], PDO::PARAM_STR); // Bind the publisher name
+
+    // Execute the query and display success or error message
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">publisher successfully created!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to create publisher.</div>';
+    }
+} 
+
+// Function to update an existing publishers
+function updatepublisher($pdo, $publisherId, $updatedName) {
+    // Prepare the SQL query to update the publishers
+    $stmt = $pdo->prepare("UPDATE table_publisher SET publisher_name = :updatedName WHERE id_pub = :publisherId");
+    $stmt->bindParam(':updatedName', $updatedName, PDO::PARAM_STR); // Bind the updated publishers name
+    $stmt->bindParam(':publisherId', $publisherId, PDO::PARAM_INT);         // Bind the publishers ID
+
+    // Execute the query and display success or error message
+    if ($stmt->execute()) {
+        echo '<div class="alert alert-success" role="alert">publisher successfully updated!</div>';
+    } else {
+        echo '<div class="alert alert-danger" role="alert">Failed to update publisher.</div>';
+    }
+}
+
+// Function to delete a publishers
+function deletepublisher($pdo, $publisherId) {
+    try {
+        // Prepare the SQL query to delete the publishers
+        $stmt = $pdo->prepare("DELETE FROM table_publisher WHERE id_pub = :publisherId");
+        $stmt->bindParam(':publisherId', $publisherId, PDO::PARAM_INT); // Bind the publishers ID
+
+        // Execute the query and display success or error message
+        if ($stmt->execute()) {
+            echo '<div class="alert alert-success" role="alert">publisher successfully deleted!</div>';
+        } else {
+            echo '<div class="alert alert-danger" role="alert">Failed to delete publisher.</div>';
+        }
+    } catch (PDOException $e) {
+        // Handle foreign key constraint violation
+        if ($e->getCode() == '23000' && strpos($e->getMessage(), '1451') !== false) {
+            echo '<div class="alert alert-warning" role="alert">Cannot delete publisher. This publisher is associated with one or more items.</div>';
+        } else {
+            // Handle unexpected errors
+            echo '<div class="alert alert-danger" role="alert">An unexpected error occurred: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        }
+    }
+}
+
+
+
+
+
 // Function to create a new age category
 function createAge($pdo, $AgeName) {
     // Prepare the SQL query to insert a new age category
@@ -804,7 +863,7 @@ function updateBook($pdo, $bookId) {
             status_fk = :id_status,
             category_fk = :id_category,
             age_fk = :id_age,
-            publisher_fk = :id_publisher,
+            publisher_fk = :id_pub,
             serie_fk = :id_serie,
             lan_fk = :id_language,
             stock_fk = :id_stock,
@@ -821,7 +880,7 @@ function updateBook($pdo, $bookId) {
     $stmt_update->bindParam(':id_status', $_POST['id_status'], PDO::PARAM_INT);
     $stmt_update->bindParam(':id_category', $_POST['id_category'], PDO::PARAM_INT);
     $stmt_update->bindParam(':id_age', $_POST['id_age'], PDO::PARAM_INT);
-    $stmt_update->bindParam(':id_publisher', $_POST['id_publisher'], PDO::PARAM_INT);
+    $stmt_update->bindParam(':id_pub', $_POST['id_pub'], PDO::PARAM_INT);
     $stmt_update->bindParam(':id_serie', $_POST['id_serie'], PDO::PARAM_INT);
     $stmt_update->bindParam(':id_language', $_POST['id_language'], PDO::PARAM_INT);
     $stmt_update->bindParam(':id_stock', $_POST['id_stock'], PDO::PARAM_INT);
@@ -902,7 +961,7 @@ function insertNewBook($pdo) {
         $stmt_insertNewBook->bindParam(":stock_fk", $_POST['id_stock'], PDO::PARAM_INT);
         $stmt_insertNewBook->bindParam(":createdby_fk", $_SESSION['user_id'], PDO::PARAM_INT);
         $stmt_insertNewBook->bindParam(":bok_img", $bookimg, PDO::PARAM_STR);
-        $stmt_insertNewBook->bindParam(":publisher_fk", $_POST['id_publisher'], PDO::PARAM_INT);
+        $stmt_insertNewBook->bindParam(":publisher_fk", $_POST['id_pub'], PDO::PARAM_INT);
 
         // Execute the insertion of the main book data
         $stmt_insertNewBook->execute();
@@ -1247,7 +1306,6 @@ function searchUsers($pdo, $search) {
 
 
 function getBooksByGenre($pdo, $genreID) {
-    // Prepare the SQL query to fetch books by a specific genre
     $stmt = $pdo->prepare('
         SELECT 
             table_books.*,                                  -- Fetch all fields from the books table
