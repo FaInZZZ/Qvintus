@@ -6,7 +6,7 @@ function getSingleBookInformation($pdo, $bookid) {
     // Prepare and execute query to fetch main book details along with related data
     $stmt_getBookdata = $pdo->prepare('
         SELECT 
-            table_bocker.*,                            -- Fetch all columns from the books table
+            table_books.*,                            -- Fetch all columns from the books table
             table_users.u_name,                       -- Name of the user who created the book entry
             table_language.lan_name,                  -- Language of the book
             table_status.status_namn,                 -- Status of the book (e.g., available, checked out)
@@ -15,37 +15,37 @@ function getSingleBookInformation($pdo, $bookid) {
             table_publisher.pub_name,                 -- Publisher of the book
             table_stock.stock_name                    -- Stock status of the book
         FROM 
-            table_bocker
+            table_books
         INNER JOIN 
             table_publisher 
         ON 
-            table_bocker.publisher_fk = table_publisher.id_pub  -- Join with publishers
+            table_books.publisher_fk = table_publisher.id_pub  -- Join with publishers
         INNER JOIN 
             table_users 
         ON 
-            table_bocker.createdby_fk = table_users.u_id        -- Join with users
+            table_books.createdby_fk = table_users.u_id        -- Join with users
         INNER JOIN 
             table_language
         ON
-            table_bocker.lan_fk = table_language.id_lan         -- Join with languages
+            table_books.lan_fk = table_language.id_lan         -- Join with languages
         INNER JOIN 
             table_age
         ON
-            table_bocker.age_fk = table_age.id_age              -- Join with age categories
+            table_books.age_fk = table_age.id_age              -- Join with age categories
         INNER JOIN 
             table_status
         ON
-            table_bocker.status_fk = table_status.id_status     -- Join with statuses
+            table_books.status_fk = table_status.id_status     -- Join with statuses
         INNER JOIN 
             table_serie
         ON
-            table_bocker.serie_fk = table_serie.id_serie        -- Join with series
+            table_books.serie_fk = table_serie.id_serie        -- Join with series
         INNER JOIN 
             table_stock
         ON
-            table_bocker.stock_fk = table_stock.id_stock        -- Join with stock statuses
+            table_books.stock_fk = table_stock.id_stock        -- Join with stock statuses
         WHERE 
-            table_bocker.id_bok = :bookid                       -- Filter by book ID
+            table_books.id_bok = :bookid                       -- Filter by book ID
     ');
     $stmt_getBookdata->bindParam(':bookid', $bookid, PDO::PARAM_INT); // Bind book ID securely
     $stmt_getBookdata->execute();                                   // Execute query
@@ -115,7 +115,7 @@ function getSingleBook($pdo, $bookID) {
     // Prepare a SQL query to fetch all book details along with related data
     $stmt = $pdo->prepare('
         SELECT 
-            table_bocker.*,                               -- All fields from the books table
+            table_books.*,                               -- All fields from the books table
             table_users.u_name AS created_by_user,       -- Name of the user who created the book entry
             table_category.id_category,                  -- Category ID
             table_category.category_name,                -- Category name
@@ -135,39 +135,39 @@ function getSingleBook($pdo, $bookID) {
             table_stock.id_stock AS stock_fk,            -- Stock ID
             table_stock.stock_name                       -- Stock status name
         FROM 
-            table_bocker
+            table_books
         LEFT JOIN 
-            table_users ON table_bocker.createdby_fk = table_users.u_id        -- Link to the user who created the entry
+            table_users ON table_books.createdby_fk = table_users.u_id        -- Link to the user who created the entry
         LEFT JOIN 
-            table_category ON table_bocker.category_fk = table_category.id_category -- Link to the books category
+            table_category ON table_books.category_fk = table_category.id_category -- Link to the books category
         LEFT JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book           -- Link books to their authors
+            book_author ON table_books.id_bok = book_author.id_book           -- Link books to their authors
         LEFT JOIN 
             table_author ON book_author.id_author = table_author.id_author     -- Fetch author names
         LEFT JOIN 
-            book_genre ON table_bocker.id_bok = book_genre.book_id             -- Link books to their genres
+            book_genre ON table_books.id_bok = book_genre.book_id             -- Link books to their genres
         LEFT JOIN 
             table_genre ON book_genre.genre_id = table_genre.id_genre          -- Fetch genre names
         LEFT JOIN 
-            book_designer ON table_bocker.id_bok = book_designer.id_book       -- Link books to their designers
+            book_designer ON table_books.id_bok = book_designer.id_book       -- Link books to their designers
         LEFT JOIN 
             table_designer ON book_designer.id_designer = table_designer.id_designer -- Fetch designer names
         LEFT JOIN 
-            table_serie ON table_bocker.serie_fk = table_serie.id_serie        -- Link books to their series
+            table_serie ON table_books.serie_fk = table_serie.id_serie        -- Link books to their series
         LEFT JOIN 
-            table_language ON table_bocker.lan_fk = table_language.id_lan      -- Link books to their language
+            table_language ON table_books.lan_fk = table_language.id_lan      -- Link books to their language
         LEFT JOIN 
-            table_age ON table_bocker.age_fk = table_age.id_age                -- Link books to their age category
+            table_age ON table_books.age_fk = table_age.id_age                -- Link books to their age category
         LEFT JOIN 
-            table_status ON table_bocker.status_fk = table_status.id_status    -- Link books to their status
+            table_status ON table_books.status_fk = table_status.id_status    -- Link books to their status
         LEFT JOIN 
-            table_stock ON table_bocker.stock_fk = table_stock.id_stock        -- Link books to their stock status
+            table_stock ON table_books.stock_fk = table_stock.id_stock        -- Link books to their stock status
         LEFT JOIN 
-            table_publisher ON table_bocker.publisher_fk = table_publisher.id_pub -- Link books to their publisher
+            table_publisher ON table_books.publisher_fk = table_publisher.id_pub -- Link books to their publisher
         WHERE 
-            table_bocker.id_bok = :id                                          -- Filter by book ID
+            table_books.id_bok = :id                                          -- Filter by book ID
         GROUP BY 
-            table_bocker.id_bok                                                -- Group results by book ID
+            table_books.id_bok                                                -- Group results by book ID
     ');
 
     // Bind the book ID securely to the query to prevent SQL injection
@@ -744,7 +744,7 @@ function updateBook($pdo, $bookId) {
     $user = new User($pdo);
 
     // Fetch the user ID of the creator of the book
-    $stmt_getCreatedBy = $pdo->prepare('SELECT createdby_fk FROM table_bocker WHERE id_bok = :id_bok');
+    $stmt_getCreatedBy = $pdo->prepare('SELECT createdby_fk FROM table_books WHERE id_bok = :id_bok');
     $stmt_getCreatedBy->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
     $stmt_getCreatedBy->execute();
     $createdBy = $stmt_getCreatedBy->fetchColumn();
@@ -786,7 +786,7 @@ function updateBook($pdo, $bookId) {
         }
     } else {
         // If no new image is uploaded, use the existing image
-        $stmt_getCurrentImage = $pdo->prepare('SELECT bok_img FROM table_bocker WHERE id_bok = :id_bok');
+        $stmt_getCurrentImage = $pdo->prepare('SELECT bok_img FROM table_books WHERE id_bok = :id_bok');
         $stmt_getCurrentImage->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
         $stmt_getCurrentImage->execute();
         $bookimg = $stmt_getCurrentImage->fetchColumn();
@@ -794,7 +794,7 @@ function updateBook($pdo, $bookId) {
 
     // Prepare the SQL statement to update the book record
     $stmt_update = $pdo->prepare('
-        UPDATE table_bocker
+        UPDATE table_books
         SET
             title = :title,
             description = :description,
@@ -884,7 +884,7 @@ function insertNewBook($pdo) {
     try {
         // Prepare the SQL statement to insert the book details
         $stmt_insertNewBook = $pdo->prepare('
-            INSERT INTO table_bocker (title, description, age_fk, date, pages, price, serie_fk, category_fk, lan_fk, status_fk, createdby_fk, bok_img, stock_fk, publisher_fk) 
+            INSERT INTO table_books (title, description, age_fk, date, pages, price, serie_fk, category_fk, lan_fk, status_fk, createdby_fk, bok_img, stock_fk, publisher_fk) 
             VALUES (:title, :desc, :aldersrekommendation, :date, :pages, :price, :serie_fk, :category_fk, :lan_fk, :status_fk, :createdby_fk, :bok_img, :stock_fk, :publisher_fk)
         ');
 
@@ -962,16 +962,16 @@ function getBook($pdo) {
     // Prepare the SQL query to fetch book details and their associated authors
     $query = $pdo->prepare('
         SELECT 
-            table_bocker.*,                                -- Fetch all fields from the books table
+            table_books.*,                                -- Fetch all fields from the books table
             GROUP_CONCAT(DISTINCT table_author.author_name SEPARATOR ", ") AS authors -- Concatenate authors 
         FROM 
-            table_bocker
+            table_books
         INNER JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book    -- Join to associate books with authors
+            book_author ON table_books.id_bok = book_author.id_book    -- Join to associate books with authors
         INNER JOIN 
             table_author ON book_author.id_author = table_author.id_author -- Fetch author details
         GROUP BY 
-            table_bocker.id_bok                              -- Group results by book ID to avoid duplication
+            table_books.id_bok                              -- Group results by book ID to avoid duplication
     ');
 
     // Execute the query
@@ -986,21 +986,21 @@ function getRareBook($pdo) {
     // Prepare the SQL query to fetch rare books (status_fk = 1), their authors, and categories
     $query = $pdo->prepare('
         SELECT 
-            table_bocker.*,                              -- Fetch all fields from the books table
+            table_books.*,                              -- Fetch all fields from the books table
             table_category.*,                            -- Fetch all fields from the category table
             GROUP_CONCAT(table_author.author_name SEPARATOR ", ") AS authors -- Concatenate authors
         FROM 
-            table_bocker
+            table_books
         INNER JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book    -- Join to associate books with authors
+            book_author ON table_books.id_bok = book_author.id_book    -- Join to associate books with authors
         INNER JOIN 
             table_author ON book_author.id_author = table_author.id_author -- Fetch author details
         INNER JOIN 
-            table_category ON table_bocker.category_fk = table_category.id_category -- Associate books with categories
+            table_category ON table_books.category_fk = table_category.id_category -- Associate books with categories
         WHERE 
-            table_bocker.status_fk = 1                  -- Filter for books with status "rare" (status_fk = 1)
+            table_books.status_fk = 1                  -- Filter for books with status "rare" (status_fk = 1)
         GROUP BY 
-            table_bocker.id_bok                          -- Group results by book ID
+            table_books.id_bok                          -- Group results by book ID
     ');
 
     // Execute the query
@@ -1015,21 +1015,21 @@ function getPopularBook($pdo) {
     // Prepare the SQL query to fetch popular books (status_fk = 3), their authors, and categories
     $query = $pdo->prepare('
         SELECT 
-            table_bocker.*,                              -- Fetch all fields from the books table
+            table_books.*,                              -- Fetch all fields from the books table
             table_category.*,                            -- Fetch all fields from the category table
             GROUP_CONCAT(table_author.author_name SEPARATOR ", ") AS authors -- Concatenate authors
         FROM 
-            table_bocker
+            table_books
         INNER JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book    -- Join to associate books with authors
+            book_author ON table_books.id_bok = book_author.id_book    -- Join to associate books with authors
         INNER JOIN 
             table_author ON book_author.id_author = table_author.id_author -- Fetch author details
         INNER JOIN 
-            table_category ON table_bocker.category_fk = table_category.id_category -- Associate books with categories
+            table_category ON table_books.category_fk = table_category.id_category -- Associate books with categories
         WHERE 
-            table_bocker.status_fk = 3                  -- Filter for books with status "popular" (status_fk = 3)
+            table_books.status_fk = 3                  -- Filter for books with status "popular" (status_fk = 3)
         GROUP BY 
-            table_bocker.id_bok                          -- Group results by book ID
+            table_books.id_bok                          -- Group results by book ID
     ');
 
     // Execute the query
@@ -1250,23 +1250,23 @@ function getBooksByGenre($pdo, $genreID) {
     // Prepare the SQL query to fetch books by a specific genre
     $stmt = $pdo->prepare('
         SELECT 
-            table_bocker.*,                                  -- Fetch all fields from the books table
+            table_books.*,                                  -- Fetch all fields from the books table
             GROUP_CONCAT(DISTINCT table_author.author_name) AS authors, -- Concatenate authors
             GROUP_CONCAT(DISTINCT table_genre.genre_name) AS genres     -- Concatenate genres
         FROM 
-            table_bocker
+            table_books
         LEFT JOIN 
-            book_genre ON table_bocker.id_bok = book_genre.book_id -- Link books to genres
+            book_genre ON table_books.id_bok = book_genre.book_id -- Link books to genres
         LEFT JOIN 
             table_genre ON book_genre.genre_id = table_genre.id_genre -- Fetch genre details
         LEFT JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book -- Link books to authors
+            book_author ON table_books.id_bok = book_author.id_book -- Link books to authors
         LEFT JOIN 
             table_author ON book_author.id_author = table_author.id_author -- Fetch author details
         WHERE 
             book_genre.genre_id = :genreID                    -- Filter by the given genre ID
         GROUP BY 
-            table_bocker.id_bok                               -- Group results by book ID to avoid duplication
+            table_books.id_bok                               -- Group results by book ID to avoid duplication
     ');
 
     // Bind the genre ID to the query securely

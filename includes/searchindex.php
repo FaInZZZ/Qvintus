@@ -23,35 +23,35 @@ if (isset($_GET['search'])) {
     // Prepare an SQL query to fetch books and their related details
     $stmt = $pdo->prepare("
         SELECT 
-            table_bocker.id_bok,                                  -- Book ID
-            table_bocker.title,                                   -- Book Title
-            table_bocker.bok_img,                                 -- Book Image
+            table_books.id_bok,                                  -- Book ID
+            table_books.title,                                   -- Book Title
+            table_books.bok_img,                                 -- Book Image
             GROUP_CONCAT(DISTINCT table_author.author_name SEPARATOR ', ') AS author, -- Concatenate multiple authors
             GROUP_CONCAT(DISTINCT table_genre.genre_name SEPARATOR ', ') AS genre,   -- Concatenate multiple genres
             table_category.category_name AS category,             -- Book Category
             table_serie.serie_name AS serie                       -- Book Series
         FROM 
-            table_bocker
+            table_books
         INNER JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book -- Link books to authors
+            book_author ON table_books.id_bok = book_author.id_book -- Link books to authors
         INNER JOIN 
             table_author ON book_author.id_author = table_author.id_author -- Fetch author names
         INNER JOIN 
-            book_genre ON table_bocker.id_bok = book_genre.book_id  -- Link books to genres
+            book_genre ON table_books.id_bok = book_genre.book_id  -- Link books to genres
         INNER JOIN 
             table_genre ON book_genre.genre_id = table_genre.id_genre -- Fetch genre names
         INNER JOIN 
-            table_category ON table_bocker.category_fk = table_category.id_category -- Fetch category names
+            table_category ON table_books.category_fk = table_category.id_category -- Fetch category names
         INNER JOIN 
-            table_serie ON table_bocker.serie_fk = table_serie.id_serie -- Fetch series names
+            table_serie ON table_books.serie_fk = table_serie.id_serie -- Fetch series names
         WHERE 
-            table_bocker.title LIKE ? OR                          -- Filter by title
+            table_books.title LIKE ? OR                          -- Filter by title
             table_author.author_name LIKE ? OR                   -- Filter by author
             table_category.category_name LIKE ? OR               -- Filter by category
             table_genre.genre_name LIKE ? OR                     -- Filter by genre
             table_serie.serie_name LIKE ?                        -- Filter by series
         GROUP BY 
-            table_bocker.id_bok                                   -- Group results by book ID
+            table_books.id_bok                                   -- Group results by book ID
         LIMIT 10;                                                -- Limit results to 10
     ");
 

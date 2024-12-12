@@ -10,35 +10,35 @@ if (isset($_GET['search'])) {
     // Prepare an SQL statement to fetch book details and related information
     $stmt = $pdo->prepare("
         SELECT 
-            table_bocker.id_bok,
-            table_bocker.title,
-            table_bocker.bok_img,
+            table_books.id_bok,
+            table_books.title,
+            table_books.bok_img,
             GROUP_CONCAT(DISTINCT table_author.author_name SEPARATOR ', ') AS author, -- Combine multiple authors into a single string
             GROUP_CONCAT(DISTINCT table_genre.genre_name SEPARATOR ', ') AS genre,   -- Combine multiple genres into a single string
             table_category.category_name AS category,                                -- Fetch book category
             table_serie.serie_name AS serie                                          -- Fetch book series
         FROM 
-            table_bocker
+            table_books
         LEFT JOIN 
-            book_author ON table_bocker.id_bok = book_author.id_book                -- Link books to their authors
+            book_author ON table_books.id_bok = book_author.id_book                -- Link books to their authors
         LEFT JOIN 
             table_author ON book_author.id_author = table_author.id_author          -- Fetch author names
         LEFT JOIN 
-            book_genre ON table_bocker.id_bok = book_genre.book_id                  -- Link books to their genres
+            book_genre ON table_books.id_bok = book_genre.book_id                  -- Link books to their genres
         LEFT JOIN 
             table_genre ON book_genre.genre_id = table_genre.id_genre               -- Fetch genre names
         LEFT JOIN 
-            table_category ON table_bocker.category_fk = table_category.id_category -- Fetch book categories
+            table_category ON table_books.category_fk = table_category.id_category -- Fetch book categories
         LEFT JOIN 
-            table_serie ON table_bocker.serie_fk = table_serie.id_serie             -- Fetch series names
+            table_serie ON table_books.serie_fk = table_serie.id_serie             -- Fetch series names
         WHERE 
-            table_bocker.title LIKE ? OR 
+            table_books.title LIKE ? OR 
             table_author.author_name LIKE ? OR 
             table_category.category_name LIKE ? OR 
             table_genre.genre_name LIKE ? OR 
             table_serie.serie_name LIKE ?                                           -- Filter based on title, author, category, genre, or series
         GROUP BY 
-            table_bocker.id_bok                                                     -- Group results by book ID
+            table_books.id_bok                                                     -- Group results by book ID
     ");
     // Execute the query with the search term applied to all filter conditions
     $stmt->execute([$search, $search, $search, $search, $search]);

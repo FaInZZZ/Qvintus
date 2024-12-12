@@ -6,7 +6,7 @@ if (isset($_GET['BookID'])) {
     $bookId = $_GET['BookID'];
 
     try {
-        $stmt_getBookOwner = $pdo->prepare('SELECT createdby_fk FROM table_bocker WHERE id_bok = :id_bok');
+        $stmt_getBookOwner = $pdo->prepare('SELECT createdby_fk FROM table_books WHERE id_bok = :id_bok');
         $stmt_getBookOwner->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
         $stmt_getBookOwner->execute();
         $book = $stmt_getBookOwner->fetch(PDO::FETCH_ASSOC);
@@ -18,7 +18,7 @@ if (isset($_GET['BookID'])) {
             }
         }
 
-        $stmt_deleteBook = $pdo->prepare('DELETE FROM table_bocker WHERE id_bok = :id_bok');
+        $stmt_deleteBook = $pdo->prepare('DELETE FROM table_books WHERE id_bok = :id_bok');
         $stmt_deleteBook->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
 
         if ($stmt_deleteBook->execute()) {

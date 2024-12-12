@@ -1,7 +1,7 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
-include_once 'includes/upload.php';
+
 $user->checkLoginStatus();
 $user->checkUserRole(5);
 
