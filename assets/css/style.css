@@ -15,7 +15,7 @@
 /* Book Card Styles */
 .book-card {
     flex: 0 0 auto;
-    width: 18rem;
+    width: 14rem;
     word-wrap: break-word;
     overflow: hidden;
 }

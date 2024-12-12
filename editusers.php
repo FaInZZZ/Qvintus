@@ -9,7 +9,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
     $user = getUserDetails($pdo, $userId);
     if (!$user) {
-        die("User not found.");
+        die('<div class="alert alert-success" role="alert" </div>');
     }
 
     
@@ -23,7 +23,10 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
 
         $result = updateUser($pdo, $u_id, $u_email, $u_password, $u_role_fk);  }
 } else {
-    die("Invalid request.");
+    die('<div class="alert alert-danger" role="alert">
+  Invalid request
+</div>
+');
 }
 ?>
 
@@ -36,7 +39,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     <title>Edit User</title>
 </head>
 <body>
-    <div class="container">
+    <div class="container mt-3">
         <h1>Edit User</h1>
         <?php if (isset($_GET['error'])): ?>
             <div class="alert alert-danger"><?= htmlspecialchars($_GET['error']); ?></div>
@@ -62,7 +65,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 <input type="password" id="u_password" name="u_password" class="form-control">
             </div>
 
-            <div class="form-group">
+            <div class="form-group mb-3">
                 <label for="u_role_fk">Role</label>
                 <select id="u_role_fk" name="u_role_fk" class="form-control" required>
                     <?php foreach ($roles as $role): ?>
@@ -73,7 +76,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Update User</button>
+            <button type="submit" class="btn custom-btn">Update User</button>
         </form>
     </div>
 </body>

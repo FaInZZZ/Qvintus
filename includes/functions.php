@@ -1,7 +1,10 @@
 <?php
 include_once 'includes/header.php';
-include_once 'class.user.php';
-$user = new User($pdo);
+include_once 'includes/class.user.php';
+
+
+
+
 
 
 function getSingleBookInformation($pdo, $bookid) {
@@ -547,11 +550,24 @@ function getDesignerInformation($pdo) {
         return $designers;
 }
 
-function updateBook($pdo, $bookId)
-{
-    if ($createdBy != $_SESSION['user_id'] && checkrolelvl($_SESSION['user_id']) < 100) {
-        die("<div class='alert alert-danger' role='alert'><strong>Permission Denied:</strong> You don't have permission to edit this book.</div>");
+
+
+function updateBook($pdo, $bookId) {
+
+    $user = new User($pdo);
+
+    $stmt_getCreatedBy = $pdo->prepare('SELECT createdby_fk FROM table_bocker WHERE id_bok = :id_bok');
+    $stmt_getCreatedBy->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
+    $stmt_getCreatedBy->execute();
+    $createdBy = $stmt_getCreatedBy->fetchColumn();
+
+    if ($_SESSION['user_id'] !== $createdBy && !$user->checkUserRole(100)) {
+        die('<div class="alert alert-danger" role="alert"><strong>Failed:</strong> You do not have permission to update this book</div>');
     }
+    
+    
+     
+
     $bookimg = null;
 
     if (!empty($_FILES["book_img"]["tmp_name"])) {
@@ -585,14 +601,15 @@ function updateBook($pdo, $bookId)
         $bookimg = $stmt_getCurrentImage->fetchColumn();
     }
 
+
     $stmt_update = $pdo->prepare('
         UPDATE table_bocker
         SET
             title = :title,
-            description = :description, -- Escaped
+            description = :description,
             pages = :pages,
             price = :price,
-            `date` = :date, -- Escaped
+            `date` = :date, 
             status_fk = :id_status,
             category_fk = :id_category,
             age_fk = :id_age,
@@ -621,11 +638,13 @@ function updateBook($pdo, $bookId)
     $stmt_update->bindParam(':book_img', $bookimg, PDO::PARAM_STR);
     $stmt_update->bindParam(':id_bok', $bookId, PDO::PARAM_INT);
 
+
+    
     if ($stmt_update->execute()) {
         echo "<div class='alert alert-success' role='alert'><strong>Success:</strong> Updated book</div>";
     } else {
         print_r($stmt_update->errorInfo());
-        die('Failed to update book.');
+        die('<div class="alert alert-danger" role="alert"><strong>Failed:</strong> Failed to update book.</div>');
     }
 }
 
@@ -802,18 +821,24 @@ function getPopularBook($pdo) {
 
 
 
-function insertNewHistory($pdo) {
-    $bookimg = basename($_FILES['book_img']['name']);
+    function insertNewHistory($pdo) {
+        try {
+            $bookimg = basename($_FILES['book_img']['name']);
 
-    $stmt_insertNewHistory = $pdo->prepare('INSERT INTO table_history (history_title, history_desc, history_img) VALUES (:history_title, :history_desc, :history_img)');
-
-    $stmt_insertNewHistory->bindParam(":history_title", $_POST['history_title'], PDO::PARAM_STR);
-    $stmt_insertNewHistory->bindParam(":history_desc", $_POST['history_desc'], PDO::PARAM_STR);
-    $stmt_insertNewHistory->bindParam(":history_img", $bookimg, PDO::PARAM_STR);
+            $stmt_insertNewHistory = $pdo->prepare('INSERT INTO table_history (history_title, history_desc, history_img) VALUES (:history_title, :history_desc, :history_img)');
     
-    $stmt_insertNewHistory->execute();
+            $stmt_insertNewHistory->bindParam(":history_title", $_POST['history_title'], PDO::PARAM_STR);
+            $stmt_insertNewHistory->bindParam(":history_desc", $_POST['history_desc'], PDO::PARAM_STR);
+            $stmt_insertNewHistory->bindParam(":history_img", $bookimg, PDO::PARAM_STR);
 
-}
+            $stmt_insertNewHistory->execute();
+    
+            echo '<div class="alert alert-success" role="alert">New history successfully added!</div>';
+        } catch (Exception $e) {
+            echo '<div class="alert alert-danger" role="alert">An error occurred: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        }
+    }
+    
 
 
 
@@ -840,39 +865,72 @@ function getRoles($pdo) {
 }
 
 function updateUser($pdo, $u_id, $u_email, $u_password, $u_role_fk) {
-    $hashedPassword = !empty($u_password) ? password_hash($u_password, PASSWORD_DEFAULT) : null;
+    try {
+        $query = "UPDATE table_users SET u_email = :email, u_role_fk = :role";
 
-    $query = "UPDATE table_users SET u_email = ?, u_role_fk = ?";
-    $params = [$u_email, $u_role_fk];
+        if (!empty($u_password)) {
+            $query .= ", u_password = :password";
+        }
 
-    if ($hashedPassword) {
-        $query .= ", u_password = ?";
-        $params[] = $hashedPassword;
+        $query .= " WHERE u_id = :id";
+
+        $stmt = $pdo->prepare($query);
+        $stmt->bindParam(':email', $u_email, PDO::PARAM_STR);
+        $stmt->bindParam(':role', $u_role_fk, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $u_id, PDO::PARAM_INT);
+
+        if (!empty($u_password)) {
+            $hashedPassword = password_hash($u_password, PASSWORD_DEFAULT);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        }
+
+        if ($stmt->execute()) {
+            echo '<div class="alert alert-success" role="alert">User updated successfully!</div>';
+            return true;
+        } else {
+            echo '<div class="alert alert-danger" role="alert">Failed to update the user. Please try again.</div>';
+            return false;
+        }
+    } catch (PDOException $e) {
+        echo '<div class="alert alert-danger" role="alert">An error occurred: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        return false;
     }
-
-    $query .= " WHERE u_id = ?";
-    $params[] = $u_id;
-
-    $stmt = $pdo->prepare($query);
-    return $stmt->execute($params);
 }
 
+
+
 function updatecurrentUser($pdo, $u_id, $u_email, $u_password, $u_role_fk) {
-    $hashedPassword = !empty($u_password) ? password_hash($u_password, PASSWORD_DEFAULT) : null;
+    try {
+        $query = "UPDATE table_users SET u_email = :email, u_role_fk = :role";
 
-    $query = "UPDATE table_users SET u_email = ?, u_role_fk = ?";
-    $params = [$u_email, $u_role_fk];
+        if (!empty($u_password)) {
+            $query .= ", u_password = :password";
+        }
 
-    if ($hashedPassword) {
-        $query .= ", u_password = ?";
-        $params[] = $hashedPassword;
+        $query .= " WHERE u_id = :id";
+
+        $stmt = $pdo->prepare($query);
+
+        $stmt->bindParam(':email', $u_email, PDO::PARAM_STR);
+        $stmt->bindParam(':role', $u_role_fk, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $u_id, PDO::PARAM_INT);        
+
+        if (!empty($u_password)) {
+            $hashedPassword = password_hash($u_password, PASSWORD_DEFAULT);
+            $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR); 
+        }
+
+        if ($stmt->execute()) {
+            echo '<div class="alert alert-success" role="alert">User updated successfully!</div>';
+            return true;
+        } else {
+            echo '<div class="alert alert-danger" role="alert">Failed to update the user. Please try again.</div>';
+            return false;
+        }
+    } catch (PDOException $e) {
+        echo '<div class="alert alert-danger" role="alert">An error occurred: ' . htmlspecialchars($e->getMessage()) . '</div>';
+        return false;
     }
-
-    $query .= " WHERE u_id = ?";
-    $params[] = $u_id;
-
-    $stmt = $pdo->prepare($query);
-    return $stmt->execute($params);
 }
 
 

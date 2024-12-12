@@ -78,7 +78,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="categorySelect" class="form-label">Select Category</label>
-            <select id="categorySelect" name="id_category" class="form-select w-100">
+            <select id="categorySelect" name="id_category" class="form-select w-100" required>
                 <option value="">Choose a Category</option>
                 <?php foreach ($getCategoryInformation as $row): ?>
                     <option value="<?php echo $row['id_category']; ?>">
@@ -92,7 +92,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
     <label for="authorSelect" class="form-label">Select Author(s)</label>
-    <select id="authorSelect" name="id_author[]" class="form-select w-100" multiple>
+    <select id="authorSelect" name="id_author[]" class="form-select w-100" required>
         <?php foreach ($getAuthorInformation as $row): ?>
             <option value="<?php echo $row['id_author']; ?>">
                 <?php echo $row['author_name']; ?>
@@ -103,7 +103,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
     <label for="GenreSelect" class="form-label">Select Genre(s)</label>
-    <select id="GenreSelect" name="id_genre[]" class="form-select w-100" multiple>
+    <select id="GenreSelect" name="id_genre[]" class="form-select w-100" required>
         <?php foreach ($getGenreInformation as $row): ?>
             <option value="<?php echo $row['id_genre']; ?>">
                 <?php echo $row['genre_name']; ?>
@@ -114,7 +114,7 @@ if (isset($_POST['submitnb'])) {
 
 <div class="mb-3">
     <label for="publisherSelect" class="form-label">Select Publisher</label>
-    <select id="publisherSelect" name="id_publisher" class="form-select w-100">
+    <select id="publisherSelect" name="id_publisher" class="form-select w-100" required>
         <option value="">Choose Publisher</option>
         <?php foreach ($getPublisherInformation as $row): ?>
             <option value="<?php echo $row['id_pub']; ?>">
@@ -127,7 +127,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="SerieSelect" class="form-label">Select Serie</label>
-            <select id="SerieSelect" name="id_Serie" class="form-select w-100">
+            <select id="SerieSelect" name="id_Serie" class="form-select w-100" required>
                 <option value="">Choose a Serie</option>
                 <?php foreach ($getSerieInformation as $row): ?>
                     <option value="<?php echo $row['id_serie']; ?>">
@@ -139,7 +139,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="LanguageSelect" class="form-label">Select Language</label>
-            <select id="LanguageSelect" name="id_Language" class="form-select w-100">
+            <select id="LanguageSelect" name="id_Language" class="form-select w-100" required>
                 <option value="">Choose a Language</option>
                 <?php foreach ($getLanguageInformation as $row): ?>
                     <option value="<?php echo $row['id_lan']; ?>">
@@ -152,7 +152,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
     <label for="DesignerSelect" class="form-label">Select Designer(s)</label>
-    <select id="DesignerSelect" name="id_designer[]" class="form-select w-100" multiple>
+    <select id="DesignerSelect" name="id_designer[]" class="form-select w-100" required>
         <?php foreach ($getDesignerInformation as $row): ?>
             <option value="<?php echo $row['id_designer']; ?>">
                 <?php echo $row['designer_name']; ?>
@@ -180,7 +180,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="StockSelect" class="form-label">Select Stock</label>
-            <select id="StockSelect" name="id_stock" class="form-select w-100">
+            <select id="StockSelect" name="id_stock" class="form-select w-100" required>
                 <option value="">Choose stock</option>
                 <?php foreach ($getStockInformation as $row): ?>
                     <option value="<?php echo $row['id_stock']; ?>">
@@ -192,7 +192,7 @@ if (isset($_POST['submitnb'])) {
 
             <div class="form-group">
                     <label for="img">Add image</label>
-                    <input type="file" class="form-control" id="book_img" name="book_img" placeholder="Upload Image"></input>
+                    <input type="file" class="form-control" id="book_img" name="book_img" placeholder="Upload Image"></input required>
                 </div>
 
         <button type="submit" name="submitnb" class="btn btn-primary">Skicka</button>

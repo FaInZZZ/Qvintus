@@ -29,33 +29,33 @@ if (empty($books)) {
 </head>
 <body>
 <div class="container mt-5">
-    <h1>Books in Genre</h1>
-    <div class="row">
-        <?php foreach ($books as $book): ?>
-            <div class="col-md-4 mb-3">
-                <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" style="text-decoration: none; color: inherit;">
-                    <div class="card">
-                        <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="height: 200px; object-fit: cover;">
-                        <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
-                            <p class="card-text"><strong>Description:</strong> 
-                                <?php 
-                                    echo htmlspecialchars(
+    <h1 class="text-center">Books in Genre</h1>
+    <?php foreach (array_chunk($books, 5) as $bookRow): ?>
+        <div class="row justify-content-center mb-4">
+            <?php foreach ($bookRow as $book): ?>
+                <div class="col-6 col-md-4 col-lg-2 text-center">
+                    <a href="single-book.php?BookID=<?php echo $book['id_bok']; ?>" style="text-decoration: none; color: inherit;">
+                        <div class="card h-100">
+                            <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top img-fluid" alt="Book Image" style="height: 200px; object-fit: cover;">
+                            <div class="card-body p-2">
+                                <h6 class="card-title text-truncate" style="font-size: 0.9rem;"><?php echo htmlspecialchars($book['title']); ?></h6>
+                                <p class="card-text text-muted mb-0" style="font-size: 0.8rem;"><strong>Description:</strong>
+                                    <?php echo htmlspecialchars(
                                         mb_strlen($book['description']) > 150 
                                             ? mb_substr($book['description'], 0, 150) . '...' 
                                             : $book['description']
-                                    ); 
-                                ?>
-                            </p>
-
-                            <p class="card-text"><strong>Authors:</strong> <?php echo htmlspecialchars($book['authors']); ?></p>
-                            <p class="card-text"><strong>Genres:</strong> <?php echo htmlspecialchars($book['genres']); ?></p>
-                            <p class="card-text"><strong>Price:</strong> <?php echo htmlspecialchars($book['price']); ?>€</p>
+                                    ); ?>
+                                </p>
+                                <p class="card-text text-muted mb-0" style="font-size: 0.8rem;"><strong>Authors:</strong> <?php echo htmlspecialchars($book['authors']); ?></p>
+                                <p class="card-text text-muted mb-0" style="font-size: 0.8rem;"><strong>Genres:</strong> <?php echo htmlspecialchars($book['genres']); ?></p>
+                                <p class="card-text text-muted" style="font-size: 0.8rem;"><strong>Price:</strong> <?php echo htmlspecialchars($book['price']); ?>€</p>
+                            </div>
                         </div>
-                    </div>
-                </a>
-            </div>
-        <?php endforeach; ?>
-    </div>
+                    </a>
+                </div>
+            <?php endforeach; ?>
+        </div>
+    <?php endforeach; ?>
 </div>
 </body>
+</html>

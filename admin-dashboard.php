@@ -22,7 +22,7 @@ include_once 'includes/header.php';
         <h1>Admin dashboard</h1>
         </div>
             <div class="col-lg-4 col-md-6">
-                <a href="includes/search-accounts.php" class="card text-center">
+                <a href="search-accounts.php" class="card text-center">
                     <div class="card-body">
                         <h5 class="card-title">Edit Users</h5>
                     </div>
