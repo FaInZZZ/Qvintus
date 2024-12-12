@@ -1251,8 +1251,8 @@ function getBooksByGenre($pdo, $genreID) {
     $stmt = $pdo->prepare('
         SELECT 
             table_bocker.*,                                  -- Fetch all fields from the books table
-            GROUP_CONCAT(DISTINCT table_author.author_name) AS authors, -- Concatenate authors' names
-            GROUP_CONCAT(DISTINCT table_genre.genre_name) AS genres     -- Concatenate genres' names
+            GROUP_CONCAT(DISTINCT table_author.author_name) AS authors, -- Concatenate authors
+            GROUP_CONCAT(DISTINCT table_genre.genre_name) AS genres     -- Concatenate genres
         FROM 
             table_bocker
         LEFT JOIN 
