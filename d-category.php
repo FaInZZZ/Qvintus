@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+$user->checkLoginStatus();
+$user->checkUserRole(5);
 
 if (isset($_POST['ccate'])) {
     $cateName = $_POST['CategoryName'];
@@ -36,15 +38,16 @@ if (isset($_POST['deleteCategory'])) {
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-    <div class="container mt-5">
-        <div class="d-flex justify-content-around align-items-center mb-4 flex-wrap">
-            <h1 class="text">Manage Categories</h1>
-            <div>
-                <button type="button" class="btn custom-btn btn-lg me-3 w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create Category</button>
-                <button type="button" class="btn btn-secondary btn-lg w-auto mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit Category</button>
-            </div>
+<div class="container mt-5">
+    <div class="d-flex justify-content-around align-items-center mb-4 flex-wrap">
+        <h1 class="text">Manage Categories</h1>
+        <div class="d-flex gap-3 flex-wrap">
+            <button type="button" class="btn custom-btn btn-lg mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create Category</button>
+            <button type="button" class="btn btn-secondary btn-lg mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit Category</button>
         </div>
     </div>
+</div>
+
 
    
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="modalCreateLabel" aria-hidden="true">
@@ -141,5 +144,6 @@ if (isset($_POST['deleteCategory'])) {
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

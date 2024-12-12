@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/config.php';
 include_once 'includes/functions.php';
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 
 if (!isset($_SESSION['user_id'])) {
     
@@ -58,5 +60,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit" class="btn custom-btn">Update Account</button>
         </form>
     </div>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

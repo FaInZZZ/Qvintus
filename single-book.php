@@ -20,6 +20,7 @@ if (!$getSingleBookInformation) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <meta charset="UTF-8">
@@ -27,7 +28,7 @@ if (!$getSingleBookInformation) {
     <title>Single Book</title>
 </head>
 <body>
-<div class="container mt-5">
+<div class="container mt-5 mb-5">
     <div class="row">
         <div class="col-md-4">
             <img src="<?php echo 'img/' . htmlspecialchars($getSingleBookInformation['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 300px; height: 400px; object-fit: cover;">
@@ -40,7 +41,11 @@ if (!$getSingleBookInformation) {
                 <?php else: ?>
                     No authors available
                 <?php endif; ?>
-            </h4>
+            </h5>
+            <p><strong><?php echo htmlspecialchars($getSingleBookInformation['stock_name']); ?></strong></p>
+            <h5>
+              
+            </h4>                 
             <h3><?php echo htmlspecialchars($getSingleBookInformation['price']); ?>€</h3>
             <ul class="nav nav-tabs" id="bookTabs" role="tablist">
                 <li class="nav-item" role="presentation">
@@ -83,7 +88,22 @@ if (!$getSingleBookInformation) {
                 </div>
             </div>
         </div>
-    </div>
+        </div>
+ 
+   <?php
+   if ($user->checkUserRole(5)) {
+       echo "
+       <div class='mt-5'>
+           <a href='editbook.php?BookID=" . $getSingleBookInformation['id_bok'] . "' class='btn custom-btn btn-lg mb-2'>Edit</a>
+       </div>";
+   } else {
+    echo " <div class='mt-5'> <a href='all-books.php' class='btn custom-btn btn-lg mb-2'>All books</a></div>";
+   }
+   ?>
 </div>
+
+<?php
+    include_once 'includes/footer.php';
+?>
 </body>
 </html>

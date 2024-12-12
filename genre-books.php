@@ -57,5 +57,6 @@ if (empty($books)) {
         </div>
     <?php endforeach; ?>
 </div>
+<?php include_once 'includes/footer.php'; ?>
 </body>
 </html>

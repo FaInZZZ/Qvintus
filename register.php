@@ -14,6 +14,9 @@ if(isset($_POST['register-submit'])){
 		}
 	}
 }
+
+$user->checkLoginStatus();
+$user->checkUserRole(300);
 ?>
 
 <!DOCTYPE html>
@@ -27,7 +30,7 @@ if(isset($_POST['register-submit'])){
 <body>
 	
 
-<div class="container">
+<div class="container mb-5 mt-5">
 <h1>Register form</h1>
     <form method="post">
 		<label for="uname" class="form-label">Username</label><br>
@@ -44,6 +47,7 @@ if(isset($_POST['register-submit'])){
 <?php 
 include_once 'includes/footer.php';
 ?>
+
 
 </body>
 </html>

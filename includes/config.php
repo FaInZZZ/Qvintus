@@ -1,5 +1,4 @@
 <?php
-define('BASE_URL', '/Qvintus/');
 session_start();
 $_SESSION['test'] = "Sessionen är igång";
 $host = '127.0.0.1';

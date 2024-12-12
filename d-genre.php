@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+$user->checkLoginStatus();
+$user->checkUserRole(5);
 
 if (isset($_POST['cgenre'])) {
     $genreName = $_POST['genreName'];
@@ -44,13 +46,13 @@ if (isset($_POST['deleteGenre'])) {
         <div class="d-flex justify-content-around align-items-center mb-4 flex-wrap">
             <h1 class="text-center">Manage Genres</h1>
             <div>
-                <button type="button" class="btn btn-success btn-lg mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create Genre</button>
+                <button type="button" class="btn custom-btn btn-lg mb-2" data-bs-toggle="modal" data-bs-target="#modalCreate">Create Genre</button>
                 <button type="button" class="btn btn-secondary btn-lg mb-2" data-bs-toggle="modal" data-bs-target="#modalEdit">Edit Genre</button>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Creating a Genre -->
+    
     <div class="modal fade" id="modalCreate" tabindex="-1" aria-labelledby="modalCreateLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -70,14 +72,14 @@ if (isset($_POST['deleteGenre'])) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" name="cgenre" class="btn btn-success w-100">Create</button>
+                        <button type="submit" name="cgenre" class="btn custom-btn w-100">Create</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    <!-- Modal for Editing a Genre -->
+ 
     <div class="modal fade" id="modalEdit" tabindex="-1" aria-labelledby="modalEditLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -93,7 +95,7 @@ if (isset($_POST['deleteGenre'])) {
         </div>
     </div>
 
-    <!-- Modal for Editing Genre Form -->
+
     <div class="modal fade" id="modalEditForm" tabindex="-1" aria-labelledby="modalEditFormLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -122,7 +124,6 @@ if (isset($_POST['deleteGenre'])) {
         </div>
     </div>
 
-    <!-- JavaScript for Search and Modal Handling -->
     <script>
         $(document).ready(function() {
             $("#searchGenre").on("input", function() {
@@ -138,8 +139,6 @@ if (isset($_POST['deleteGenre'])) {
                                 var genreId = $(this).data("id");
                                 var genreName = $(this).data("name");
                                 var genreStatus = $(this).data("status");
-
-                                // Populate modal fields
                                 $("#genreId").val(genreId);
                                 $("#updatedName").val(genreName);
 
@@ -162,5 +161,6 @@ if (isset($_POST['deleteGenre'])) {
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

@@ -1,6 +1,8 @@
 <?php
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
+$user->checkLoginStatus();
+$user->checkUserRole(5);
 
 if (isset($_POST['cserie'])) {
     $serieName = $_POST['serieName'];
@@ -141,5 +143,6 @@ if (isset($_POST['deleteserie'])) {
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php include_once 'includes/footerfixed.php'; ?>
 </body>
 </html>

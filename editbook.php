@@ -2,6 +2,7 @@
 include_once 'includes/functions.php';
 include_once 'includes/header.php';
 $user->checkLoginStatus();
+$user->checkUserRole(5);
 
 
 
@@ -31,6 +32,7 @@ if (isset($_POST['submitEdit'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<link rel="stylesheet" href="assets/css/style.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -204,12 +206,12 @@ if (isset($_POST['submitEdit'])) {
             </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group mb-4">
             <label for="img">Add image</label>
             <input type="file" class="form-control" id="book_img" name="book_img" placeholder="Upload Image">
         </div>
 
-        <button type="submit" name="submitEdit" class="btn btn-primary">Save Changes</button>
+        <button type="submit" name="submitEdit" class="btn custom-btn btn-lg mb-1">Save Changes</button>
     </form>
 </div>
 
@@ -221,6 +223,7 @@ if (isset($_POST['submitEdit'])) {
         });
     });
 </script>
+<?php include_once 'includes/footer.php'; ?>
 </body>
 </html>
 

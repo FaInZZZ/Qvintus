@@ -18,6 +18,7 @@ $histories = getLatestHistories($pdo);
     <title>Document</title>
 </head>
 <body>
+
     <main>
     <div class="container mt-5">
             <div class="mb-3 d-flex align-items-center">
@@ -38,6 +39,8 @@ $histories = getLatestHistories($pdo);
                         <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
+                            <h6 class="card-title"><?php echo htmlspecialchars($book['authors']); ?></h6>
+                            <h7 class="card-title"><?php echo htmlspecialchars($book['category_name']); ?></h7>
                             <div class="text-end">
                                 <p class="card-text"><?php echo htmlspecialchars($book['price']); ?>€</p>
                             </div>
@@ -82,6 +85,8 @@ $histories = getLatestHistories($pdo);
                 <img src="<?php echo 'img/' . htmlspecialchars($book['bok_img']); ?>" class="card-img-top" alt="Book Image" style="width: 100%; height: 300px; object-fit: cover;">
                 <div class="card-body">
                     <h5 class="card-title"><?php echo htmlspecialchars($book['title']); ?></h5>
+                    <h6 class="card-title"><?php echo htmlspecialchars($book['authors']); ?></h6>
+                    <h7 class="card-title"><?php echo htmlspecialchars($book['category_name']); ?></h7>
                     <div class="text-end">
                         <p class="card-text"><?php echo htmlspecialchars($book['price']); ?>€</p>
                     </div>
@@ -104,7 +109,7 @@ $histories = getLatestHistories($pdo);
         <h2 class="h2 text-dark mb-3">Can't find what you are looking for?</h2>
         <p class="lead text-muted mb-4">No problem, we can handle most requests, big or small.</p>
         <div class="d-flex justify-content-center">
-            <a href="#" class="btn custom-btn btn-lg custom-btn-width">Make a request</a>
+            <a href="contact.php" class="btn custom-btn btn-lg custom-btn-width">Make a request</a>
         </div>
     </div>
 </section>
