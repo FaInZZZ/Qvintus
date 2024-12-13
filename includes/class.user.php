@@ -188,6 +188,24 @@ class User {
       return false;
     }
   }
+
+  public function logout() {
+    // Start the session if it hasn't been started already
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+
+    // Unset all session variables
+    $_SESSION = [];
+
+    // Destroy the session
+    session_destroy();
+
+    // Redirect the user to the login page or homepage
+    header("Location: login.php");
+    exit;
+}
+
   
 }
 
