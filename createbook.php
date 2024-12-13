@@ -20,6 +20,8 @@ $getPublisherInformation = getPublisherInformation($pdo);
 if (isset($_POST['submitnb'])) {
     $submitNewBook = insertNewBook($pdo);
 }
+
+
 ?>
 
 <!DOCTYPE html>
@@ -96,6 +98,8 @@ if (isset($_POST['submitnb'])) {
             </select>
         </div>
 
+        
+
         <div class="mb-3">
             <label for="GenreSelect" class="form-label">Select Genre(s)</label>
             <select id="GenreSelect" name="id_genre[]" class="form-select w-100" multiple required>
@@ -109,7 +113,7 @@ if (isset($_POST['submitnb'])) {
 
         <div class="mb-3">
             <label for="publisherSelect" class="form-label">Select Publisher</label>
-            <select id="publisherSelect" name="id_publisher" class="form-select w-100" required>
+            <select id="publisherSelect" name="id_pub" class="form-select w-100" required>
                 <option value="">Choose Publisher</option>
                 <?php foreach ($getPublisherInformation as $row): ?>
                     <option value="<?php echo htmlspecialchars($row['id_pub'], ENT_QUOTES, 'UTF-8'); ?>">
